@@ -56,17 +56,37 @@
     }
 
     document.addEventListener("DOMContentLoaded", populateNoteSelectorWithKeys);
+    
+  // Read the control channel value from the dropdown
+    function getControlChannelValue() {
+        const controlChannelDropdown = document.getElementById('controlChannel');
+        return controlChannelDropdown ? controlChannelDropdown.value : "Unknown";
+    }
 
-   document.addEventListener("keydown", function(e) {
-       const o = keyToMidiNote[e.code];
-       if (o) {
-           const n = 440 * Math.pow(2, (o - 69) / 12);
-           console.log(`[KEYDOWN] Key: ${e.code}, MIDI note: ${o}, Frequency: ${n}`);
-           playMS10TriangleBass(n);
-           arpNotes.push(n);
-           updateArpNotesDisplay();
-       }
-   });
+    // Update the keydown event listener to log the control channel value
+    document.addEventListener("keydown", function(e) {
+        const midiNote = keyToMidiNote[e.code];
+        if (midiNote) {
+            const frequencyFromKey = 440 * Math.pow(2, (midiNote - 69) / 12);
+            const noteNameFromKey = frequencyToNoteName(frequencyFromKey);
+    
+            console.log(`Pressed Key: ${e.code}, Note Name from Key: ${noteNameFromKey}`);
+    
+            // Play the note without checking the dropdown selection
+            playMS10TriangleBass(frequencyFromKey);
+    
+            // Get the selected control channel and push the frequency to the correct array in arpNotes
+            const controlChannel = getControlChannelValue();
+            arpNotesByChannel[controlChannel].push(frequencyFromKey);
+            
+            console.log("[Arp Array Update] Note added:", noteNameFromKey, "Current arpNotes for channel", controlChannel + ":", arpNotesByChannel[controlChannel].map(frequencyToNoteName), "Control Channel:", controlChannel);
+    
+            updateArpNotesDisplay();
+        }
+    });
+    
+    
+    
    document.addEventListener("keyup", function(e) {
        const o = keyToMidiNote[e.code];
        if (o) {

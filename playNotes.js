@@ -1,7 +1,12 @@
 // playNotes.js
 
 function playArpNotes() {
-            console.log("[playArpNotes] Function called.");
+    console.log("[playArpNotes] Function called.");
+
+
+    const currentChannel = getControlChannelValue();
+    const arpNotes = arpNotesByChannel[currentChannel];
+
 
             if (isArpeggiatorOn && arpNotes.length > 0) {
                 console.log("[playArpNotes] Arpeggiator is on and arpNotes are present.");
@@ -14,7 +19,7 @@ function playArpNotes() {
                 }
                 
                 if (arpNotes[currentArpIndex] !== null) {
-                    console.log("[playArpNotes] Playing note at current index:", currentArpIndex, "Note:", arpNotes[currentArpIndex]);
+                    console.log("[Arp Playback] Playing note at current index:", currentArpIndex, "Note:", frequencyToNoteName(arpNotes[currentArpIndex]));
                     playMS10TriangleBass(arpNotes[currentArpIndex]);
                 }
 

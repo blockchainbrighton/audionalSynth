@@ -1,7 +1,26 @@
 // arpeggiator.js
         let isArpeggiatorOn = false;
-        let arpNotes = [];
-        
+        let currentArpNotes = [];
+        let arpNotesByChannel = {
+            'all': [],
+            '1': [],
+            '2': [],
+            '3': [],
+            '4': [],
+            '5': [],
+            '6': [],
+            '7': [],
+            '8': [],
+            '9': [],
+            '10': [],
+            '11': [],
+            '12': [],
+            '13': [],
+            '14': [],
+            '15': [],
+            '16': []
+        };
+                
         let currentArpIndex = 0;
         let arpTimeout = null;
         let nudgeApplied = false;
@@ -19,7 +38,7 @@
         }
         function stopArpeggiator(){
             isArpeggiatorOn = false;
-            arpNotes.length = 0;
+            currentArpNotes.length = 0;
         }
 
   
@@ -46,15 +65,15 @@
 
 
         function incrementArpIndex() {
-            currentArpIndex = (currentArpIndex + 1) % arpNotes.length;  // Wrap around
+            currentArpIndex = (currentArpIndex + 1) % currentArpNotes.length;  // Wrap around
         }
 
         function decrementArpIndex() {
-            currentArpIndex = (currentArpIndex - 1 + arpNotes.length) % arpNotes.length;  // Wrap around, but in reverse
+            currentArpIndex = (currentArpIndex - 1 + currentArpNotes.length) % currentArpNotes.length;  // Wrap around, but in reverse
         }
 
         function randomizeArpIndex() {
-            currentArpIndex = Math.floor(Math.random() * arpNotes.length);  // Random index
+            currentArpIndex = Math.floor(Math.random() * currentArpNotes.length);  // Random index
         }
 
         // Additional Pattern Functions
@@ -63,7 +82,7 @@
         function upDownArpIndex() {
             if (goingUp) {
                 incrementArpIndex();
-                if (currentArpIndex === arpNotes.length - 1) {
+                if (currentArpIndex === currentArpNotes.length - 1) {
                     goingUp = false;
                 }
             } else {
@@ -75,7 +94,7 @@
         }
 
         function doubleStepArpIndex() {
-            currentArpIndex = (currentArpIndex + 2) % arpNotes.length;
+            currentArpIndex = (currentArpIndex + 2) % currentArpNotes.length;
         }
 
         function randomWithRestsArpIndex() {
@@ -112,17 +131,22 @@
             let y = 30;
             
             let currentColumn = 0;
-
-            arpNotes.forEach(note => {
+        
+            const currentChannel = getControlChannelValue();
+            currentArpNotes = arpNotesByChannel[currentChannel]; // Get the arpNotes array for the current channel
+            
+            console.log("[ArpNotes Display Update] Starting update for arpNotes:", currentArpNotes);
+            
+            currentArpNotes.forEach(note => {
                 let noteText = note !== null ? frequencyToNoteName(note) : "Rest";
-
+            
                 // Check if the next note (including its spacing) would overflow the canvas width
                 if (x + spacing > canvas.width) {
                     currentColumn = 0;
                     x = 10;
                     y += 30;
                 }
-
+            
                 ctx.fillText(noteText, x, y);
                         
                 currentColumn++;
@@ -134,8 +158,12 @@
                     x += spacing;
                 }
             });
+            
+            console.log("[ArpNotes Display Update] Finished update for arpNotes.");
         }
-
+        
+        
+        
         // arpToggle.js
         function toggleArpeggiator(){
             const btn = document.getElementById("arpToggle");
