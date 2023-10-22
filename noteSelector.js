@@ -71,7 +71,7 @@
        const o = keyToMidiNote[e.code];
        if (o) {
            console.log(`[KEYUP] Key: ${e.code}, MIDI note: ${o}`);
-           stopMS10TriangleBass();
+           // stopMS10TriangleBass();
        }
    });
    document.getElementById("arpToggle").addEventListener("click", toggleArpeggiator);

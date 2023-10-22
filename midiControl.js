@@ -20,6 +20,15 @@
             let n = e.data[1];
             let t = e.data.length > 2 ? e.data[2] : 0;
 
+            const controlChannelDropdown = document.getElementById('controlChannel');
+            const selectedChannel = controlChannelDropdown.value;
+
+            if (selectedChannel === '1') {
+                console.log(`[Channel 1] Received MIDI message:`, e.data);
+            } else {
+                console.log(`Received MIDI message:`, e.data);
+            }
+
             switch (o) {
                 case 144:
                     if (t > 0) {
