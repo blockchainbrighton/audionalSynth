@@ -1,4 +1,5 @@
 // controlChannels.js
+const controlChannelDropdown = document.getElementById('controlChannel');
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,4 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
         option.text = 'Channel ' + i;
         controlChannelDropdown.appendChild(option);
     }
+
+    // Set a default value for the dropdown
+    controlChannelDropdown.value = 'all';
+
+    // Add an event listener to update channelSettings on change
+    controlChannelDropdown.addEventListener('change', function() {
+        // Update the channelSettings here
+        // Example: captureSettings(instanceId); // You'll need to get the instanceId value
+    });
 });

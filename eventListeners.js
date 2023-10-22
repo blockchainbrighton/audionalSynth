@@ -29,7 +29,44 @@
         });
 
 
+// Function to capture settings when any control changes
+function handleControlChange(event) {
+    const element = event.target;
+    const parentElement = element.closest('[data-synth-instance-id]');
+    
+    if (!parentElement) {
+        console.error(`[eventListeners.js] Control element does not have a parent with 'data-synth-instance-id' attribute. Control ID: ${element.id}`);
+        return;
+    }
 
+    const instanceId = parentElement.getAttribute('data-synth-instance-id');
+    captureSettings(instanceId);
+}
+
+// List of control IDs that affect channelSettings
+const controlIds = [
+    'waveform',
+    'note',
+    'attack',
+    'release',
+    'cutoff',
+    'resonance',
+    'volume',
+    'arpPattern',
+    'arpSpeed',
+    'arpTempo',
+    'bpmAdjustValue',
+    'timingAdjust',
+    'useSequencerTiming'
+];
+
+// Add event listeners for each control
+controlIds.forEach(controlId => {
+    const controlElement = document.getElementById(controlId);
+    if (controlElement) {
+        controlElement.addEventListener('change', handleControlChange);
+    }
+});
 
       
 

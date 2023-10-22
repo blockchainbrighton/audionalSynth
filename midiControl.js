@@ -20,7 +20,6 @@
             let n = e.data[1];
             let t = e.data.length > 2 ? e.data[2] : 0;
 
-            const controlChannelDropdown = document.getElementById('controlChannel');
             const selectedChannel = controlChannelDropdown.value;
 
             if (selectedChannel === '1') {

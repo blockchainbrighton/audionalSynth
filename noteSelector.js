@@ -59,7 +59,6 @@
     
   // Read the control channel value from the dropdown
     function getControlChannelValue() {
-        const controlChannelDropdown = document.getElementById('controlChannel');
         return controlChannelDropdown ? controlChannelDropdown.value : "Unknown";
     }
 
