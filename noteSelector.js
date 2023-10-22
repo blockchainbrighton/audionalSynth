@@ -96,3 +96,4 @@
    });
    document.getElementById("arpToggle").addEventListener("click", toggleArpeggiator);
    
+   

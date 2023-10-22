@@ -83,3 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const defaultControlChannel = document.querySelector('#controlChannel').value;
     applySettings(1, defaultControlChannel); // Assuming instanceId is 1 for simplicity
 });
+
+document.getElementById("controlChannel").addEventListener('change', function(e) {
+    const instanceId = e.target.closest('[data-synth-instance-id]').getAttribute('data-synth-instance-id');
+    const selectedControlChannel = e.target.value;
+    applySettings(instanceId, selectedControlChannel);
+});
