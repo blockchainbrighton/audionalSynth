@@ -1,7 +1,18 @@
 // channelSettings.js
 
-const channelSettings = {};
-
+const channelSettings = {
+    'all': {
+        waveform: 'defaultWaveform',
+        note: 'defaultNote',
+        // ... other default settings
+    },
+    '1': {
+        waveform: 'defaultWaveform',
+        note: 'defaultNote',
+        // ... other default settings
+    },
+    // ... similar structure for other channels
+};
 function captureSettings(instanceId) {
     const container = document.querySelector(`[data-synth-instance-id="${instanceId}"]`);
     
@@ -59,3 +70,16 @@ function applySettings(instanceId, controlChannel) {
     container.querySelector('#timingAdjust').value = settings.timingAdjust;
     container.querySelector('#useSequencerTiming').checked = settings.useSequencerTiming;
 }
+
+// Attach event listeners to update channelSettings in real-time
+document.addEventListener('change', function(e) {
+    const element = e.target;
+    const instanceId = element.closest('[data-synth-instance-id]').getAttribute('data-synth-instance-id');
+    captureSettings(instanceId);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize the UI with default settings for the selected control channel
+    const defaultControlChannel = document.querySelector('#controlChannel').value;
+    applySettings(1, defaultControlChannel); // Assuming instanceId is 1 for simplicity
+});
