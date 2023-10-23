@@ -1,3 +1,66 @@
- // synth.js
-        let context=new(window.AudioContext||window.webkitAudioContext),currentOscillator=null;function playMS10TriangleBass(e=null){currentOscillator&&(currentOscillator.stop(),currentOscillator=null);let t=context.createOscillator(),n=context.createGain(),l=context.createBiquadFilter(),c=document.getElementById("waveform").value;if(t.type=c,null===e&&(e=parseFloat(document.getElementById("note").value),!isFinite(e)))return void console.error("Invalid frequency value:",e);t.frequency.setValueAtTime(e,context.currentTime);let o=document.getElementById("attack").value/1e3,r=document.getElementById("release").value/1e3,a=document.getElementById("cutoff").value,u=document.getElementById("resonance").value;l.type="lowpass",l.frequency.value=a,l.Q.value=u,n.gain.setValueAtTime(0,context.currentTime);const i=getVolume();n.gain.linearRampToValueAtTime(2*i,context.currentTime+o),n.gain.linearRampToValueAtTime(0,context.currentTime+o+r),t.connect(l),l.connect(n),n.connect(context.destination),t.start(),t.stop(context.currentTime+o+r),currentOscillator=t}
-        let nextNoteTime = context.currentTime;
+// synth.js
+let channels = {}; // Object to hold multiple AudioContext and Oscillator instances
+
+// Utility function to get or create a channel's context and oscillator
+function getOrCreateChannel(channelNumber) {
+    if (!channels[channelNumber]) {
+        channels[channelNumber] = {
+            context: new (window.AudioContext || window.webkitAudioContext)(),
+            oscillator: null
+        };
+    }
+    return channels[channelNumber];
+}
+
+function playMS10TriangleBass(frequency = null, channelNumber = 1) { 
+    // Default to channel 1 if not provided
+    let { context, oscillator } = getOrCreateChannel(channelNumber);
+    
+    if (oscillator) {
+        oscillator.stop();
+        oscillator = null;
+    }
+    
+    let osc = context.createOscillator(),
+        gainNode = context.createGain(),
+        filter = context.createBiquadFilter(),
+        waveform = document.getElementById("waveform").value;
+    
+    osc.type = waveform;
+    
+    if (frequency === null) {
+        frequency = parseFloat(document.getElementById("note").value);
+        if (!isFinite(frequency)) {
+            console.error("Invalid frequency value:", frequency);
+            return;
+        }
+    }
+    
+    osc.frequency.setValueAtTime(frequency, context.currentTime);
+    
+    let attack = document.getElementById("attack").value / 1000,
+        release = document.getElementById("release").value / 1000,
+        cutoff = document.getElementById("cutoff").value,
+        resonance = document.getElementById("resonance").value;
+    
+    filter.type = "lowpass";
+    filter.frequency.value = cutoff;
+    filter.Q.value = resonance;
+    
+    gainNode.gain.setValueAtTime(0, context.currentTime);
+    const volume = getVolume();
+    gainNode.gain.linearRampToValueAtTime(2 * volume, context.currentTime + attack);
+    gainNode.gain.linearRampToValueAtTime(0, context.currentTime + attack + release);
+    
+    osc.connect(filter);
+    filter.connect(gainNode);
+    gainNode.connect(context.destination);
+    
+    osc.start();
+    osc.stop(context.currentTime + attack + release);
+    
+    channels[channelNumber].oscillator = osc; 
+}
+
+// Note: The getVolume function seems to be missing from the provided code. 
+// It should be defined elsewhere for the above code to work.

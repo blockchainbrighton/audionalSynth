@@ -1,7 +1,16 @@
 // playNotes.js
 
+function getSelectedChannel() {
+    const controlChannelDropdown = document.getElementById('controlChannel');
+    return controlChannelDropdown.value;
+}
+
+
 function playArpNotes() {
             console.log("[playArpNotes] Function called.");
+
+            let selectedChannel = getSelectedChannel();
+
 
             if (isArpeggiatorOn && arpNotes.length > 0) {
                 console.log("[playArpNotes] Arpeggiator is on and arpNotes are present.");
@@ -15,8 +24,18 @@ function playArpNotes() {
                 
                 if (arpNotes[currentArpIndex] !== null) {
                     console.log("[playArpNotes] Playing note at current index:", currentArpIndex, "Note:", arpNotes[currentArpIndex]);
-                    playMS10TriangleBass(arpNotes[currentArpIndex]);
-                }
+                    
+                    
+                    if (selectedChannel === "all") {
+                        // Handle "All Channels"
+                        for (let channelNumber in channels) {
+                            playMS10TriangleBass(arpNotes[currentArpIndex], channelNumber);
+                        }
+                    } else {
+                        // Handle a specific channel
+                        playMS10TriangleBass(arpNotes[currentArpIndex], Number(selectedChannel));
+                    }
+                                    }
 
                 let pattern = document.getElementById("arpPattern").value;
                 console.log("[playArpNotes] Arpeggiator pattern:", pattern);
@@ -63,7 +82,10 @@ function playArpNotes() {
                 }
 
                 // Use context (AudioContext) to schedule the next call
-                let scheduledTime = context.currentTime + interval / 1000; // Convert to seconds
+                let channel = getOrCreateChannel(selectedChannel === "all" ? 1 : Number(selectedChannel));
+                console.log("[playArpNotes] Selected Channel:", selectedChannel);
+
+                let scheduledTime = channel.context.currentTime + interval / 1000; // Convert to seconds                
                 console.log("[playArpNotes] Scheduled time (in context time):", scheduledTime);
 
                 arpTimeout = setTimeout(() => {
