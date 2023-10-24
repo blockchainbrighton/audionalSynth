@@ -32,7 +32,7 @@ class Arpeggiator {
                     let selectedChannelSettings = getSettings(channelNumber);
                     
                     // Apply the channel settings to the synthesizer
-                    applySynthSettings(selectedChannelSettings);
+                    this.applySynthSettings(selectedChannelSettings);
                     
                     // Play the note with the applied settings
                     playMS10TriangleBass(note, channelNumber);

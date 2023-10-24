@@ -16,10 +16,7 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
     // Default to channel 1 if not provided
     let { context, oscillator } = getOrCreateChannel(channelNumber);
     
-    if (oscillator) {
-        oscillator.stop();
-        oscillator = null;
-    }
+    // If there's an existing oscillator, we won't stop it. This allows multiple channels to play simultaneously.
     
     let osc = context.createOscillator(),
         gainNode = context.createGain(),
@@ -57,8 +54,6 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
     gainNode.connect(context.destination);
     
     osc.start();
-    osc.stop(context.currentTime + attack + release);
     
     channels[channelNumber].oscillator = osc; 
 }
-

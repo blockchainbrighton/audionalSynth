@@ -28,13 +28,10 @@
             </label>
             <div id="control-channel-buttons">
                 <button class="control-channel-btn active" data-channel="all" data-control-channel-id="all">All Channels</button>
-                <!-- Loop to generate buttons for channels 1-16 -->
-                <script>
-                    for (let i = 1; i <= 16; i++) {
-                        document.write(`<button class="control-channel-btn" data-channel="${i}" data-control-channel-id="${i}">${i}</button>`);
-                    }
-                </script>
-            </div>         
+                <!-- Loop to generate buttons for channels 1-16 and their corresponding Solo buttons -->
+                <div id="channel-buttons-container"></div>
+            </div>
+            
             <button onclick="playMS10TriangleBass()">Play Note</button>
         </div>
         <div class="control-container">
@@ -97,6 +94,7 @@
             <button onclick="loadSettings()">Load Settings</button>
         </div>
     </div>
+        <script src="soloButtons.js"></script>
         <script src="arpeggiator.js"></script>
         <script src="channelSettings.js"></script>
         <script src="controlChannels.js"></script>
