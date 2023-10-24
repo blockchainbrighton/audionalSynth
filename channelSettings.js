@@ -91,7 +91,7 @@ function applySettings(controlChannelId, selectedChannel) {
     // Apply the arpNotes for the selected channel
     arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
     arp.updateAllChannel();
-    console.log("[applySettings] Updated arpNotes for all channel:", channelSettings["all"].arpNotes);
+    console.log("[applySettings] Updated arpNotes for all channel:", channelSettings["all"].arpNotesByChannel);
 
 
 

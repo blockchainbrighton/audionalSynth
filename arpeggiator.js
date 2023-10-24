@@ -28,17 +28,18 @@ class Arpeggiator {
                     // Set the current channel to the specific channelNumber
                     this.currentChannel = channelNumber;
                     
-                    // Fetch the settings for the specific channel using getSelectedChannel
-                    let selectedChannelSettings = this.getSelectedChannel();
+                    // Fetch the settings for the specific channel using getSettings
+                    let selectedChannelSettings = getSettings(channelNumber);
                     
-                    // Apply the channel settings (assuming there's a function to apply settings)
-                    applyChannelSettings(selectedChannelSettings);
+                    // Apply the channel settings to the synthesizer
+                    applySynthSettings(selectedChannelSettings);
                     
                     // Play the note with the applied settings
                     playMS10TriangleBass(note, channelNumber);
                     
                     // Reset the settings to default or previous state if needed
-                    resetChannelSettings();
+                    // This step might be optional depending on how applySynthSettings works
+                    resetSynthSettings();
                 }
             }
             // Reset the currentChannel to 'all' after processing all channels
@@ -46,6 +47,28 @@ class Arpeggiator {
         } else {
             playMS10TriangleBass(note, Number(channel));
         }
+    }
+    
+    
+   applySynthSettings(settings, channelNumber) {
+        // Assuming there's a global synth object or a function to get the synth for a specific channel
+        const synth = getSynthForChannel(channelNumber); // This function needs to be defined based on your setup
+    
+        // Set the synthesizer parameters based on the settings
+        synth.setWaveform(settings.waveform);
+        synth.setAttack(Number(settings.attack));
+        synth.setRelease(Number(settings.release));
+        synth.setCutoff(Number(settings.cutoff));
+        synth.setResonance(Number(settings.resonance));
+        synth.setVolume(Number(settings.volume));
+        synth.setArpPattern(settings.arpPattern);
+        synth.setArpSpeed(settings.arpSpeed);
+        synth.setArpTempo(Number(settings.arpTempo));
+        synth.setBpmAdjustValue(Number(settings.bpmAdjustValue));
+        synth.setTimingAdjust(Number(settings.timingAdjust));
+        synth.setUseSequencerTiming(settings.useSequencerTiming);
+    
+        // If there are other settings that need to be applied to the synth, add them here
     }
     
     
