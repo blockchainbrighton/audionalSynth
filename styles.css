@@ -65,3 +65,16 @@
             margin-left: 10px;
         }
 
+        .channel-btn {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            background-color: #ddd;
+            cursor: pointer;
+        }
+        
+        .channel-btn.active {
+            background-color: #555;
+            color: #fff;
+        }
+        

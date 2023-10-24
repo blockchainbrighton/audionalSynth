@@ -12,10 +12,7 @@
     <h2>Audional Synth</h2>
     <div class="synth-container">
         <div class="dropdown-container">
-            <label>
-                Control Channel:
-                <select id="controlChannel"></select> <!-- Control Channel Dropdown -->
-            </label>
+            
             <label>
                 Waveform:
                 <select id="waveform">
@@ -29,6 +26,15 @@
                 Note:
                 <select id="note"></select>
             </label>
+            <div id="control-channel-buttons">
+                <button class="control-channel-btn" data-channel="all" data-control-channel-id="all">All Channels</button>
+                <!-- Loop to generate buttons for channels 1-16 -->
+                <script>
+                    for (let i = 1; i <= 16; i++) {
+                        document.write(`<button class="control-channel-btn" data-channel="${i}" data-control-channel-id="${i}">${i}</button>`);
+                    }
+                </script>
+            </div>         
             <button onclick="playMS10TriangleBass()">Play Note</button>
         </div>
         <div class="control-container">
@@ -91,6 +97,7 @@
             <button onclick="loadSettings()">Load Settings</button>
         </div>
     </div>
+        <script src="channelSettings.js"></script>
         <script src="controlChannels.js"></script>
         <script src="main.js"></script>
         <script src="arpeggiator.js"></script>
