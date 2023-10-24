@@ -68,7 +68,7 @@ document.addEventListener("keydown", function(e) {
         const n = 440 * Math.pow(2, (o - 69) / 12);
         console.log(`[KEYDOWN] Key: ${e.code}, MIDI note: ${o}, Frequency: ${n}`);
         
-        let selectedChannel = getSelectedChannel(); // Get the currently selected control channel
+        let selectedChannel = arp.getSelectedChannel(); // Get the currently selected control channel
         console.log(`[KEYDOWN] Selected Channel: ${selectedChannel}`);
 
         playMS10TriangleBass(n, selectedChannel); // Pass the selected control channel instead of the MIDI channel

@@ -55,12 +55,12 @@ function captureSettings(selectedControlChannel) {
     channelSettings[selectedControlChannel] = { ...channelSettings[selectedControlChannel], ...settings };
 
     // Capture arpNotes for the selected channel
-    channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
-
-    // Capture arpNotes for the selected channel
     if (selectedControlChannel !== "all") {
         channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
+        arp.updateAllChannel();
     }
+
+    console.log(`[channelSettings.js] arpNotes for channel ${selectedControlChannel}:`, arp.arpNotesByChannel[selectedControlChannel]);
 
     // Save to localStorage
     localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
@@ -90,6 +90,10 @@ function applySettings(controlChannelId, selectedChannel) {
 
     // Apply the arpNotes for the selected channel
     arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
+    arp.updateAllChannel();
+    console.log("[applySettings] Updated arpNotes for all channel:", channelSettings["all"].arpNotes);
+
+
 
     console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 
@@ -106,13 +110,12 @@ function applySettings(controlChannelId, selectedChannel) {
         }
     }
 
-    // Apply the arpNotes for the selected channel
-    if (controlChannelId !== "all") {
-        arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
-    }
 
     // Update the arp notes display after applying the settings
     arp.updateArpNotesDisplay();
+
+    console.log(`[channelSettings.js] arpNotes after applying settings for channel ${controlChannelId}:`, arp.arpNotesByChannel[controlChannelId]);
+
 
     console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 }

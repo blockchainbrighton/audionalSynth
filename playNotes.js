@@ -21,11 +21,16 @@ function playNoteForChannel(channel, note) {
 }
 
 function playArpNotes() {
+    console.log("[playArpNotes] allChannel at start:", arp.allChannel);
     const selectedChannel = getSelectedChannel();
     console.log("[playArpNotes] Function called.");
     console.log("[playArpNotes] Current arpNotes:", arp.arpNotesByChannel[selectedChannel]);
 
     const currentNotesArray = arp.arpNotesByChannel[selectedChannel];
+    if (this.currentChannel === 'all') {
+        this.arpNotesByChannel['all'] = [...this.allChannel];
+    }
+    console.log("[playArpNotes] Synchronized arpNotes for all channel:", this.arpNotesByChannel['all']);
 
     if (arp.isArpeggiatorOn && currentNotesArray.length > 0) {
         console.log("[playArpNotes] Arpeggiator is on and arpNotes are present.");

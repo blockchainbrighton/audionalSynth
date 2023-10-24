@@ -11,31 +11,105 @@ class Arpeggiator {
         this.allChannel = [];
         this.currentChannel = 'all';
         this.currentArpIndex = 0;
-        this.playArpeggiator = this.playArpeggiator.bind(this);
         this.arpTimeout = null;
         this.nudgeApplied = false;
         this.isNudgeActive = false;
         this.goingUp = true;
     }
 
-    // Method to update the 'all' channel based on the notes in the individual channels
-    updateAllChannel() {
-        this.allChannel = [];
-        for (let channel in this.arpNotesByChannel) {
-            if (channel !== "all") {
-                this.allChannel = this.allChannel.concat(this.arpNotesByChannel[channel]);
+    getSelectedChannel() {
+        return this.currentChannel;
+    }
+
+    playNoteForChannel(channel, note) {
+        if (channel === "all") {
+            for (let channelNumber in this.arpNotesByChannel) {
+                if (channelNumber !== "all") {
+                    playMS10TriangleBass(note, channelNumber);
+                }
             }
+        } else {
+            playMS10TriangleBass(note, Number(channel));
         }
     }
-    
+
+    playArpNotes() {
+        const selectedChannel = this.getSelectedChannel();
+        const currentNotesArray = this.arpNotesByChannel[selectedChannel];
+        if (this.currentChannel === 'all') {
+            this.arpNotesByChannel['all'] = [...this.allChannel];
+        }
+
+        if (this.isArpeggiatorOn && currentNotesArray.length > 0) {
+            if (isExternalModeActive) return;
+
+            if (currentNotesArray[this.currentArpIndex] !== null) {
+                this.playNoteForChannel(selectedChannel, currentNotesArray[this.currentArpIndex]);
+            }
+
+            let pattern = document.getElementById("arpPattern").value;
+            let baseInterval = 60 / parseFloat(document.getElementById("arpTempo").value) * 1000;
+
+            switch (pattern) {
+                case 'up':
+                    this.incrementArpIndex();
+                    break;
+                case 'down':
+                    this.decrementArpIndex();
+                    break;
+                case 'random':
+                    this.randomizeArpIndex();
+                    break;
+                case 'up-down':
+                    this.upDownArpIndex();
+                    break;
+                case 'double-step':
+                    this.doubleStepArpIndex();
+                    break;
+                case 'random-rest':
+                    this.randomWithRestsArpIndex();
+                    break;
+                default:
+                    console.error("Unknown arpeggiator pattern:", pattern);
+            }
+
+            baseInterval = this.applySpeedModifier(baseInterval);
+
+            if (this.isNudgeActive) {
+                let timingAdjustValue = parseFloat(document.getElementById("timingAdjust").value) / 100;
+                const adjustmentMultiplier = 1 - timingAdjustValue;
+                baseInterval *= adjustmentMultiplier;
+            }
+
+            let channel = getOrCreateChannel(selectedChannel === "all" ? 1 : Number(selectedChannel));
+            let scheduledTime = channel.context.currentTime + baseInterval / 1000;
+
+            this.arpTimeout = setTimeout(() => {
+                this.nudgeApplied = false;
+                this.playArpNotes();
+            }, baseInterval);
+        } else {
+            console.log("[playArpNotes] Arpeggiator is off or arpNotes is empty.");
+        }
+        this.updateArpNotesDisplay();
+    }
+
+    // ... [Previous methods of the Arpeggiator class]
+
+    updateAllChannel() {
+        let currentAllChannel = [];
+        for (let channel in this.arpNotesByChannel) {
+            if (channel !== "all") {
+                currentAllChannel = currentAllChannel.concat(this.arpNotesByChannel[channel]);
+            }
+        }
+
+        this.allChannel = currentAllChannel.filter(note => !this.allChannel.includes(note) || currentAllChannel.includes(note));
+    }
 
     startArpeggiator() {
         this.isArpeggiatorOn = true;
-        playArpNotes(); // Assuming playArpNotes is still a global function
-    }
-
-    playArpeggiator() {
-        this.startArpeggiator();
+        this.playArpNotes();
     }
 
     stopArpeggiator() {
@@ -44,19 +118,13 @@ class Arpeggiator {
     }
 
     applySpeedModifier(baseInterval) {
-        let arpSpeed = document.getElementById("arpSpeed").value;
-
+        const arpSpeed = document.getElementById("arpSpeed").value;
         switch (arpSpeed) {
-            case 'normal':
-                return baseInterval;
-            case 'double-time':
-                return baseInterval / 2;
-            case 'half-time':
-                return baseInterval * 2;
-            case 'quadruple-time':
-                return baseInterval / 4;
-            case 'octuple-time':
-                return baseInterval / 8;
+            case 'normal': return baseInterval;
+            case 'double-time': return baseInterval / 2;
+            case 'half-time': return baseInterval * 2;
+            case 'quadruple-time': return baseInterval / 4;
+            case 'octuple-time': return baseInterval / 8;
             default:
                 console.error("Unknown speed setting:", arpSpeed);
                 return baseInterval;
@@ -76,16 +144,9 @@ class Arpeggiator {
     }
 
     upDownArpIndex() {
-        if (this.goingUp) {
-            this.incrementArpIndex();
-            if (this.currentArpIndex === this.arpNotesByChannel[this.currentChannel].length - 1) {
-                this.goingUp = false;
-            }
-        } else {
-            this.decrementArpIndex();
-            if (this.currentArpIndex === 0) {
-                this.goingUp = true;
-            }
+        this.goingUp ? this.incrementArpIndex() : this.decrementArpIndex();
+        if (this.currentArpIndex === 0 || this.currentArpIndex === this.arpNotesByChannel[this.currentChannel].length - 1) {
+            this.goingUp = !this.goingUp;
         }
     }
 
@@ -94,10 +155,14 @@ class Arpeggiator {
     }
 
     randomWithRestsArpIndex() {
-        if (Math.random() > 0.8) {
-            return;
+        if (Math.random() <= 0.8) {
+            this.randomizeArpIndex();
         }
-        this.randomizeArpIndex();
+    }
+
+    toggleArpeggiator() {
+        this.isArpeggiatorOn ? this.stopArpeggiator() : this.startArpeggiator();
+        document.getElementById("arpToggle").innerText = this.isArpeggiatorOn ? "Stop Arpeggiator" : "Start Arpeggiator";
     }
 
     pauseArpeggiator() {
@@ -113,62 +178,29 @@ class Arpeggiator {
         const canvas = document.getElementById("arpNotesDisplay");
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
         ctx.font = "bold 11px Arial";
         ctx.fillStyle = "#FFFFFF";
-    
-        const columns = 16;
-        const noteWidth = ctx.measureText("W#").width;
-        const spacing = noteWidth + 7;
+
+        const spacing = ctx.measureText("W#").width + 7;
         let x = 10;
         let y = 30;
-        let currentColumn = 0;
-    
-        // Only display notes for the current channel
-        const currentChannelNotes = this.arpNotesByChannel[this.currentChannel] || [];
-        console.log("[updateArpNotesDisplay] Current channel:", this.currentChannel);
-        console.log("[updateArpNotesDisplay] Notes for current channel:", currentChannelNotes);
-    
-        currentChannelNotes.forEach(note => {
-            let noteText = note !== null ? frequencyToNoteName(note) : "Rest";
-    
-            if (x + spacing > canvas.width) {
-                currentColumn = 0;
-                x = 10;
-                y += 30;
-            }
-    
-            ctx.fillText(noteText, x, y);
-    
-            console.log("[updateArpNotesDisplay] Note added at position:", x, y, noteText);
-    
-            currentColumn++;
-            if (currentColumn >= columns) {
-                currentColumn = 0;
-                x = 10;
-                y += 30;
-            } else {
-                x += spacing;
-            }
-        });
-    }
-    
 
-    toggleArpeggiator() {
-        const btn = document.getElementById("arpToggle");
-        if (this.isArpeggiatorOn) {
-            btn.innerText = "Start Arpeggiator";
-            this.stopArpeggiator();
-        } else {
-            btn.innerText = "Stop Arpeggiator";
-            this.startArpeggiator();
-        }
+        const currentChannelNotes = this.arpNotesByChannel[this.currentChannel] || [];
+        currentChannelNotes.forEach(note => {
+            const noteText = note !== null ? frequencyToNoteName(note) : "Rest";
+            if (x + spacing > canvas.width) {
+                x = 10;
+                y += 30;
+            }
+            ctx.fillText(noteText, x, y);
+            x += spacing;
+        });
+        this.updateAllChannel();
     }
+
 }
 
 // Create an instance of the Arpeggiator class
 const arp = new Arpeggiator();
-document.getElementById("playArp").addEventListener("click", arp.playArpeggiator);
-
-// Bind the toggleArpeggiator method to the arp instance
-document.getElementById("arpToggle").addEventListener("click", arp.toggleArpeggiator.bind(arp));
+document.getElementById("playArp").addEventListener("click", () => arp.startArpeggiator());
+document.getElementById("arpToggle").addEventListener("click", () => arp.toggleArpeggiator());
