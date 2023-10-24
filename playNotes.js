@@ -1,9 +1,8 @@
 // playNotes.js
 
 function getSelectedChannel() {
-    // Get the active control channel button
-    const activeButton = document.querySelector('.control-channel-btn.active');
-    const selectedChannel = activeButton ? activeButton.getAttribute('data-control-channel-id') : 'all';
+    // Use the currentChannel property from the Arpeggiator instance
+    const selectedChannel = arp.currentChannel;
     console.log("[getSelectedChannel] Selected Channel:", selectedChannel);
     return selectedChannel;
 }
@@ -25,7 +24,7 @@ function playArpNotes() {
         }
 
         if (currentNotesArray && currentNotesArray.length > arp.currentArpIndex && currentNotesArray[arp.currentArpIndex] !== null) {
-            console.log("[playArpNotes] Playing note at current index:", arp.currentArpIndex, "Note:", arp.currentNotesArray[arp.currentArpIndex]);
+            console.log("[playArpNotes] Playing note at current index:", arp.currentArpIndex, "Note:", currentNotesArray[arp.currentArpIndex]);
 
             if (selectedChannel === "all") {
                 // Handle "All Channels"

@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     controlChannelButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             const selectedControlChannel = e.target.getAttribute('data-control-channel-id');
-            
+            arp.currentChannel = selectedControlChannel;  // Update the currentChannel property
+        
             if (!selectedControlChannel) {
                 console.error("[channelSettings.js] Missing selectedControlChannel");
                 return;
