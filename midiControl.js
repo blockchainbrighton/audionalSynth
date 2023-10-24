@@ -1,4 +1,6 @@
 // midiControl.js
+
+
 const A4_MIDI_NUMBER = 69;
 const A4_FREQUENCY = 440;
 const arpNoteNames = [];
@@ -20,6 +22,7 @@ function onMIDIMessage(e) {
     let midiChannel = (status & 0x0F) + 1;  // Extract MIDI channel from status byte
     let note = e.data[1];
     let velocity = e.data.length > 2 ? e.data[2] : 0;
+    let selectedChannel = getSelectedChannel();
 
     switch (status & 0xF0) {  // Using bitwise AND to mask the channel bits
         case 144:
@@ -27,7 +30,7 @@ function onMIDIMessage(e) {
                 let freq = midiNoteToFrequency(note);
                 console.log(`Note On. MIDI note: ${note}, Frequency: ${freq}`);
                 if (isArpeggiatorOn) {
-                    arpNotes.push(freq);
+                    arpNotesByChannel[selectedChannel].push(freq);
                     updateArpNotesDisplay();
                 } else {
                     playMS10TriangleBass(freq, midiChannel); // Pass the MIDI channel as the synthesizer channel
@@ -38,8 +41,8 @@ function onMIDIMessage(e) {
             console.log(`Note Off. MIDI note: ${note}`);
             if (isArpeggiatorOn) {
                 let freq = midiNoteToFrequency(note);
-                let index = arpNotes.indexOf(freq);
-                if (index !== -1) arpNotes.splice(index, 1);
+                let index = arpNotesByChannel[selectedChannel].indexOf(freq);
+                if (index !== -1) arpNotesByChannel[selectedChannel].splice(index, 1);
             }
             break;
         default:

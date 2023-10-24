@@ -9,14 +9,18 @@ function getOrCreateChannel(channelNumber) {
             oscillator: null
         };
     }
+    console.log(`[synth.js] Getting or creating channel: ${channelNumber}. Current channels:`, channels);
     return channels[channelNumber];
 }
 
 function playMS10TriangleBass(frequency = null, channelNumber = 1) { 
     // Default to channel 1 if not provided
+    console.log(`[synth.js] playMS10TriangleBass called. Frequency: ${frequency}, Channel: ${channelNumber}`);
+    
     let { context, oscillator } = getOrCreateChannel(channelNumber);
     
     if (oscillator) {
+        console.log(`[synth.js] Stopping existing oscillator for channel: ${channelNumber}`);
         oscillator.stop();
         oscillator = null;
     }
@@ -25,6 +29,8 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
         gainNode = context.createGain(),
         filter = context.createBiquadFilter(),
         waveform = document.getElementById("waveform").value;
+    
+    console.log(`[synth.js] Oscillator type (waveform): ${waveform}`);
     
     osc.type = waveform;
     
@@ -36,6 +42,8 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
         }
     }
     
+    console.log(`[synth.js] Set oscillator frequency: ${frequency}`);
+    
     osc.frequency.setValueAtTime(frequency, context.currentTime);
     
     let attack = document.getElementById("attack").value / 1000,
@@ -43,12 +51,16 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
         cutoff = document.getElementById("cutoff").value,
         resonance = document.getElementById("resonance").value;
     
+    console.log(`[synth.js] Filter settings - Type: lowpass, Frequency: ${cutoff}, Resonance: ${resonance}`);
+    
     filter.type = "lowpass";
     filter.frequency.value = cutoff;
     filter.Q.value = resonance;
     
     gainNode.gain.setValueAtTime(0, context.currentTime);
     const volume = getVolume();
+    console.log(`[synth.js] Gain settings - Attack: ${attack}, Release: ${release}, Volume: ${volume}`);
+    
     gainNode.gain.linearRampToValueAtTime(2 * volume, context.currentTime + attack);
     gainNode.gain.linearRampToValueAtTime(0, context.currentTime + attack + release);
     
@@ -61,6 +73,3 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
     
     channels[channelNumber].oscillator = osc; 
 }
-
-// Note: The getVolume function seems to be missing from the provided code. 
-// It should be defined elsewhere for the above code to work.

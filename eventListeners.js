@@ -34,7 +34,8 @@
       
 
 document.getElementById("addRest").addEventListener("click", function() {
-    arpNotes.push(null); // Using null to represent a rest
+    let selectedChannel = getSelectedChannel();
+    arpNotesByChannel[selectedChannel].push(null); // Using null to represent a rest
     updateArpNotesDisplay();
 });
 
@@ -46,3 +47,4 @@ document.getElementById("timingAdjust").addEventListener('input', function() {
 document.getElementById("timingAdjust").addEventListener('change', function() {
     isNudgeActive = false; // Reset when the user stops adjusting the slider
 });
+
