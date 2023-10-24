@@ -3,7 +3,9 @@
 function getSelectedChannel() {
     // Get the active control channel button
     const activeButton = document.querySelector('.control-channel-btn.active');
-    return activeButton ? activeButton.getAttribute('data-control-channel-id') : 'all';
+    const selectedChannel = activeButton ? activeButton.getAttribute('data-control-channel-id') : 'all';
+    console.log("[getSelectedChannel] Selected Channel:", selectedChannel);
+    return selectedChannel;
 }
 
 function playArpNotes() {
@@ -22,25 +24,25 @@ function playArpNotes() {
             return;
         }
 
-        if (currentNotesArray[currentArpIndex] !== null) {
-            console.log("[playArpNotes] Playing note at current index:", currentArpIndex, "Note:", currentNotesArray[currentArpIndex]);
+        if (currentNotesArray && currentNotesArray.length > arp.currentArpIndex && currentNotesArray[arp.currentArpIndex] !== null) {
+            console.log("[playArpNotes] Playing note at current index:", arp.currentArpIndex, "Note:", arp.currentNotesArray[arp.currentArpIndex]);
 
             if (selectedChannel === "all") {
                 // Handle "All Channels"
-                for (let channelNumber in arpNotesByChannel) {
+                for (let channelNumber in arp.arpNotesByChannel) {
                     if (channelNumber !== "all") {
-                        playMS10TriangleBass(currentNotesArray[currentArpIndex], channelNumber);
+                        playMS10TriangleBass(currentNotesArray[arp.currentArpIndex], channelNumber);
                     }
                 }
             } else {
                 // Handle a specific channel
-                playMS10TriangleBass(currentNotesArray[currentArpIndex], Number(selectedChannel));
+                playMS10TriangleBass(currentNotesArray[arp.currentArpIndex], Number(selectedChannel));
             }
         }
 
         let pattern = document.getElementById("arpPattern").value;
         console.log("[playArpNotes - pattern] Arpeggiator pattern:", pattern);
-        console.log("[playArpNotes - arpPattern] Current arp pattern:", arpPattern);
+        console.log("[playArpNotes - arpPattern] Current arp pattern:", arp.arpPattern);
 
         let baseInterval = 60 / parseFloat(document.getElementById("arpTempo").value) * 1000;
         console.log("[playArpNotes] Base interval (ms):", baseInterval);
@@ -68,15 +70,15 @@ function playArpNotes() {
                 console.error("Unknown arpeggiator pattern:", pattern);
         }
 
-        console.log("[playArpNotes] New arp index after pattern modification:", currentArpIndex);
+        console.log("[playArpNotes] New arp index after pattern modification:", arp.currentArpIndex);
 
-        baseInterval = applySpeedModifier(baseInterval);
+        baseInterval = arp.applySpeedModifier(baseInterval);
         console.log("[playArpNotes] Base interval after speed modifier (ms):", baseInterval);
-        console.log("[playArpNotes] Current arp speed:", arpSpeed);
+        console.log("[playArpNotes] Current arp speed:", arp.arpSpeed);
         let interval = baseInterval;
 
         // Overwrite BPM with Nudge if Nudge is active
-        if (isNudgeActive) {
+        if (arp.isNudgeActive) {
             let timingAdjustValue = parseFloat(document.getElementById("timingAdjust").value) / 100;
             const adjustmentMultiplier = 1 - timingAdjustValue;
             baseInterval *= adjustmentMultiplier;
@@ -90,7 +92,7 @@ function playArpNotes() {
         let scheduledTime = channel.context.currentTime + interval / 1000; // Convert to seconds                
         console.log("[playArpNotes] Scheduled time (in context time):", scheduledTime);
 
-        arpTimeout = setTimeout(() => { // Use arp. prefix
+        arp.arpTimeout = setTimeout(() => { // Use arp. prefix
             arp.nudgeApplied = false; // Use arp. prefix
             console.log("[playArpNotes] Timeout triggered. Calling playArpNotes again.");
             playArpNotes();

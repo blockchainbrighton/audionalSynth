@@ -33,11 +33,13 @@
 
       
 
-document.getElementById("addRest").addEventListener("click", function() {
-    let selectedChannel = getSelectedChannel();
-    arpNotesByChannel[selectedChannel].push(null); // Using null to represent a rest
-    updateArpNotesDisplay();
-});
+        document.getElementById("addRest").addEventListener("click", function() {
+            let selectedChannel = getSelectedChannel();
+            console.log("[addRest] Selected Channel:", selectedChannel);
+            arpNotesByChannel[selectedChannel].push(null); // Using null to represent a rest
+            console.log("[addRest] arpNotesByChannel after adding rest:", arpNotesByChannel);
+            updateArpNotesDisplay();
+        });
 
 // Add an event listener to detect nudge slider activity
 document.getElementById("timingAdjust").addEventListener('input', function() {

@@ -20,10 +20,12 @@ function onMIDIMessage(e) {
     console.log("Received MIDI message:", e.data);
     let status = e.data[0];
     let midiChannel = (status & 0x0F) + 1;  // Extract MIDI channel from status byte
+    console.log("[onMIDIMessage] MIDI Channel:", midiChannel);
     let note = e.data[1];
     let velocity = e.data.length > 2 ? e.data[2] : 0;
     let selectedChannel = getSelectedChannel();
-
+    console.log("[onMIDIMessage] Selected Control Channel:", selectedChannel);
+    
     switch (status & 0xF0) {  // Using bitwise AND to mask the channel bits
         case 144:
             if (velocity > 0) {

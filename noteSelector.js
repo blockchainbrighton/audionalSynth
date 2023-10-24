@@ -7,15 +7,21 @@ const startingMidiNote = 21;
 for (let e = 0; e < keyNames.length; e++) {
     keyToMidiNote["Key" + keyNames[e]] = 21 + e;
 }
+console.log("[INIT] keyToMidiNote mapping:", keyToMidiNote);
+
 
 window.noteNameToFrequency = function(t, o) {
     const n = musicalNotes.indexOf(t) + 12 * (o + 1);
-    return 440 * Math.pow(2, (n - 69) / 12);
+    const freq = 440 * Math.pow(2, (n - 69) / 12);
+    console.log(`[CONVERT] Note: ${t}${o} to Frequency: ${freq}`);
+    return freq;
 }
 
 window.frequencyToNoteName = function(t) {
     let o = Math.round(12 * Math.log2(t / 440) + 69);
-    return musicalNotes[o % 12] + (Math.floor(o / 12) - 1);
+    const noteName = musicalNotes[o % 12] + (Math.floor(o / 12) - 1);
+    console.log(`[CONVERT] Frequency: ${t} to Note: ${noteName}`);
+    return noteName;
 }
 
 function populateNoteSelectorWithKeys() {
@@ -51,6 +57,7 @@ function populateNoteSelectorWithKeys() {
     if (c1Frequency) {
         noteDropdown.value = c1Frequency;
     }
+    console.log("[INIT] Note selector populated.");
 }
 
 document.addEventListener("DOMContentLoaded", populateNoteSelectorWithKeys);
@@ -62,10 +69,12 @@ document.addEventListener("keydown", function(e) {
         console.log(`[KEYDOWN] Key: ${e.code}, MIDI note: ${o}, Frequency: ${n}`);
         
         let selectedChannel = getSelectedChannel(); // Get the currently selected control channel
+        console.log(`[KEYDOWN] Selected Channel: ${selectedChannel}`);
 
         playMS10TriangleBass(n, selectedChannel); // Pass the selected control channel instead of the MIDI channel
-        arpNotesByChannel[selectedChannel].push(n);
-        updateArpNotesDisplay();
+        arp.arpNotesByChannel[selectedChannel].push(n);
+        console.log(`[KEYDOWN] arpNotesByChannel after push:`, arp.arpNotesByChannel);
+        arp.updateArpNotesDisplay();
     }
 });
 
@@ -75,5 +84,3 @@ document.addEventListener("keyup", function(e) {
         console.log(`[KEYUP] Key: ${e.code}, MIDI note: ${o}`);
     }
 });
-
-document.getElementById("arpToggle").addEventListener("click", arp.toggleArpeggiator);
