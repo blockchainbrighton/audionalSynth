@@ -54,7 +54,9 @@ function loadSettings() {
                 arpNotes = settings.arpNotes;
                 updateArpNotesDisplay();
             }
-        };
+       // Update localStorage with the loaded settings
+       localStorage.setItem('channelSettings', JSON.stringify(settings));
+    };
         reader.readAsText(file);
     };
 

@@ -54,6 +54,9 @@ function captureSettings(selectedControlChannel) {
     console.log(`[channelSettings.js] Captured settings for controlChannelId ${selectedControlChannel}:`, settings);
 
     channelSettings[selectedControlChannel] = { ...channelSettings[selectedControlChannel], ...settings };
+
+    // Save to localStorage
+localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
 }
 
 function getSettings(controlChannel) {
@@ -67,6 +70,12 @@ function getSettings(controlChannel) {
 
 
 function applySettings(controlChannelId, selectedChannel) {
+     // Check localStorage for saved settings
+     const savedSettings = JSON.parse(localStorage.getItem('channelSettings'));
+     if (savedSettings) {
+        Object.assign(channelSettings, savedSettings);
+    }
+
     const settings = channelSettings[controlChannelId];
     if (!settings) {
         console.error(`[channelSettings.js] No settings found for controlChannelId="${controlChannelId}"`);
@@ -107,18 +116,3 @@ document.addEventListener('DOMContentLoaded', function() {
     applySettings(defaultControlChannelId, defaultControlChannelId);
 });
 
-document.querySelectorAll(".control-channel-btn").forEach(button => {
-    button.addEventListener('click', function(e) {
-        const selectedControlChannel = e.target.getAttribute('data-control-channel-id');
-        
-        if (!selectedControlChannel) {
-            console.error("[channelSettings.js] Missing selectedControlChannel");
-            return;
-        }
-        // Log the entire current settings for the current channel
-        console.log(`[channelSettings.js] Full settings for Control Channel ${selectedControlChannel}:`, getSettings(selectedControlChannel));
-        
-        captureSettings(selectedControlChannel);
-        applySettings(selectedControlChannel, selectedControlChannel);
-    });
-});
