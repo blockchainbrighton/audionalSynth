@@ -5,10 +5,10 @@ class Arpeggiator {
     constructor() {
         this.isArpeggiatorOn = false;
         this.arpNotesByChannel = {
-            'all': [],
             '1': [], '2': [], '3': [], '4': [], '5': [], '6': [], '7': [], '8': [],
             '9': [], '10': [], '11': [], '12': [], '13': [], '14': [], '15': [], '16': []
         };
+        this.allChannel = [];
         this.currentChannel = 'all';
         this.currentArpIndex = 0;
         this.playArpeggiator = this.playArpeggiator.bind(this);
@@ -17,6 +17,17 @@ class Arpeggiator {
         this.isNudgeActive = false;
         this.goingUp = true;
     }
+
+    // Method to update the 'all' channel based on the notes in the individual channels
+    updateAllChannel() {
+        this.allChannel = [];
+        for (let channel in this.arpNotesByChannel) {
+            if (channel !== "all") {
+                this.allChannel = this.allChannel.concat(this.arpNotesByChannel[channel]);
+            }
+        }
+    }
+    
 
     startArpeggiator() {
         this.isArpeggiatorOn = true;

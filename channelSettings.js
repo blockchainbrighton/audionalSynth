@@ -27,6 +27,7 @@ console.log("[channelSettings.js] Initialized default channel settings:", channe
 
 function captureSettings(selectedControlChannel) {    
     const container = document.querySelector('.synth-container');
+
     
     if (!container) {
         console.error(`[channelSettings.js] No container found for controlChannelId: ${selectedControlChannel}`);
@@ -55,6 +56,11 @@ function captureSettings(selectedControlChannel) {
 
     // Capture arpNotes for the selected channel
     channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
+
+    // Capture arpNotes for the selected channel
+    if (selectedControlChannel !== "all") {
+        channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
+    }
 
     // Save to localStorage
     localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
@@ -98,6 +104,11 @@ function applySettings(controlChannelId, selectedChannel) {
                 element.value = value;
             }
         }
+    }
+
+    // Apply the arpNotes for the selected channel
+    if (controlChannelId !== "all") {
+        arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
     }
 
     // Update the arp notes display after applying the settings

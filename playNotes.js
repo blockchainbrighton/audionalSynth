@@ -7,15 +7,27 @@ function getSelectedChannel() {
     return selectedChannel;
 }
 
+function playNoteForChannel(channel, note) {
+    if (channel === "all") {
+        // Play the note for all channels
+        for (let channelNumber in arp.arpNotesByChannel) {
+            if (channelNumber !== "all") {
+                playMS10TriangleBass(note, channelNumber);
+            }
+        }
+    } else {
+        playMS10TriangleBass(note, Number(channel));
+    }
+}
+
 function playArpNotes() {
-    let selectedChannel = getSelectedChannel();
+    const selectedChannel = getSelectedChannel();
     console.log("[playArpNotes] Function called.");
-    console.log("[playArpNotes] Current arpNotes:", arp.arpNotesByChannel[selectedChannel]); // Use arp. prefix
+    console.log("[playArpNotes] Current arpNotes:", arp.arpNotesByChannel[selectedChannel]);
 
-    let currentNotesArray = arp.arpNotesByChannel[selectedChannel];
+    const currentNotesArray = arp.arpNotesByChannel[selectedChannel];
 
-    if (arp.isArpeggiatorOn && currentNotesArray.length > 0) { // Use arp. prefix
-      
+    if (arp.isArpeggiatorOn && currentNotesArray.length > 0) {
         console.log("[playArpNotes] Arpeggiator is on and arpNotes are present.");
 
         if (isExternalModeActive) {
@@ -23,25 +35,13 @@ function playArpNotes() {
             return;
         }
 
-        if (currentNotesArray && currentNotesArray.length > arp.currentArpIndex && currentNotesArray[arp.currentArpIndex] !== null) {
+        if (currentNotesArray[arp.currentArpIndex] !== null) {
             console.log("[playArpNotes] Playing note at current index:", arp.currentArpIndex, "Note:", currentNotesArray[arp.currentArpIndex]);
-
-            if (selectedChannel === "all") {
-                // Handle "All Channels"
-                for (let channelNumber in arp.arpNotesByChannel) {
-                    if (channelNumber !== "all") {
-                        playMS10TriangleBass(currentNotesArray[arp.currentArpIndex], channelNumber);
-                    }
-                }
-            } else {
-                // Handle a specific channel
-                playMS10TriangleBass(currentNotesArray[arp.currentArpIndex], Number(selectedChannel));
-            }
+            playNoteForChannel(selectedChannel, currentNotesArray[arp.currentArpIndex]);
         }
 
         let pattern = document.getElementById("arpPattern").value;
         console.log("[playArpNotes - pattern] Arpeggiator pattern:", pattern);
-        console.log("[playArpNotes - arpPattern] Current arp pattern:", arp.arpPattern);
 
         let baseInterval = 60 / parseFloat(document.getElementById("arpTempo").value) * 1000;
         console.log("[playArpNotes] Base interval (ms):", baseInterval);
@@ -99,5 +99,5 @@ function playArpNotes() {
     } else {
         console.log("[playArpNotes] Arpeggiator is off or arpNotes is empty.");
     }
-    arp.updateArpNotesDisplay(); // Use arp. prefix
+    arp.updateArpNotesDisplay();
 }
