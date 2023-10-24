@@ -10,7 +10,7 @@
 
 <body>
     <h2>Audional Synth</h2>
-    <div class="synth-container">
+    <div class="synth-container" id="mainSynthContainer">
         <div class="dropdown-container">
             
             <label>
@@ -94,6 +94,17 @@
             <button onclick="loadSettings()">Load Settings</button>
         </div>
     </div>
+     <!-- Solo Channel Modal -->
+        <div id="soloChannelModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h3>Solo Channel: <span id="soloChannelNumber"></span></h3>
+                
+                <!-- Placeholder for replicated synth controls -->
+                <div id="soloSynthContainer"></div>
+            </div>
+        </div>
+
         <script src="soloButtons.js"></script>
         <script src="arpeggiator.js"></script>
         <script src="channelSettings.js"></script>

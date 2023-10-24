@@ -77,8 +77,14 @@ class Arpeggiator {
         console.log("[playArpNotes - Start] allChannel contents:", this.allChannel); // Log at the start
     
         const selectedChannel = this.getSelectedChannel();
-        const currentNotesArray = selectedChannel === "all" ? this.allChannel : this.arpNotesByChannel[selectedChannel];
     
+        // Validate selectedChannel
+        if (!this.arpNotesByChannel.hasOwnProperty(selectedChannel) && selectedChannel !== "all") {
+            console.error(`[playArpNotes] Invalid channel: ${selectedChannel}`);
+            return;
+        }
+    
+        const currentNotesArray = selectedChannel === "all" ? this.allChannel : this.arpNotesByChannel[selectedChannel];
     
         if (!this.isArpeggiatorOn) {
             console.log("[playArpNotes] Arpeggiator is off.");

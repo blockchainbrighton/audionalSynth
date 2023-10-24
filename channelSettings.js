@@ -67,6 +67,11 @@ function captureSettings(selectedControlChannel) {
 }
 
 function getSettings(controlChannel) {
+    // If it's a solo channel, redirect to the main channel
+    if (controlChannel.startsWith('solo-')) {
+        controlChannel = controlChannel.replace('solo-', '');
+    }
+
     if (!channelSettings[controlChannel]) {
         console.warn(`[channelSettings.js] Using default settings for Control Channel ${controlChannel} as specific settings were not found.`);
         return { ...channelSettings.all };
@@ -74,6 +79,7 @@ function getSettings(controlChannel) {
     console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, channelSettings[controlChannel]);
     return channelSettings[controlChannel];
 }
+
 
 function applySettings(controlChannelId, selectedChannel) {
     // Check localStorage for saved settings
@@ -124,6 +130,7 @@ document.addEventListener('change', function(e) {
     const element = e.target;
     const selectedControlChannel = element.closest('.control-channel-btn')?.getAttribute('data-control-channel-id');
     if (selectedControlChannel) {
+        console.log(`[channelSettings.js] Detected change for control-channel-id:`, selectedControlChannel);
         captureSettings(selectedControlChannel);
     }
 });
