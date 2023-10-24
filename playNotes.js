@@ -1,8 +1,9 @@
 // playNotes.js
 
 function getSelectedChannel() {
-    const controlChannelDropdown = document.getElementById('controlChannel');
-    return controlChannelDropdown.value;
+    // Get the active control channel button
+    const activeButton = document.querySelector('.control-channel-btn.active');
+    return activeButton ? activeButton.getAttribute('data-control-channel-id') : 'all';
 }
 
 

@@ -35,10 +35,6 @@
             transition: background-color .3s;
         }
 
-        button:hover {
-            background-color: #0fafff;
-            color: #2d2d2d;
-        }
 
         label {
             display: flex;
@@ -65,16 +61,21 @@
             margin-left: 10px;
         }
 
-        .channel-btn {
+        .control-channel-btn {
             padding: 10px 15px;
             margin: 5px;
             border: none;
-            background-color: #ddd;
+            background-color: #6b6a6a;
             cursor: pointer;
+            transition: transform 0.3s; /* Smooth transition for the magnify effect */
         }
         
-        .channel-btn.active {
-            background-color: #555;
-            color: #fff;
+        .control-channel-btn:hover {
+            transform: scale(1.1); /* Magnify the button by 10% on hover */
+        }
+        
+        .control-channel-btn.active {
+            background-color: #ffffff;
+            color: #000000;
         }
         

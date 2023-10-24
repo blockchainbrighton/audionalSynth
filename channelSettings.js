@@ -1,18 +1,7 @@
 // channelSettings.js
 
 const channelSettings = {
-    all: getDefaultSettings() // Default settings for "all" control channel
-};
-
-// Initialize default settings for channels 1-16
-for (let i = 1; i <= 16; i++) {
-    channelSettings[i] = getDefaultSettings();
-}
-
-console.log("[channelSettings.js] Initialized default channel settings:", channelSettings);
-
-function getDefaultSettings() {
-    return {
+    all: {
         waveform: 'sawtooth',
         note: 'defaultNote',
         attack: '10',
@@ -25,13 +14,21 @@ function getDefaultSettings() {
         arpTempo: '105',
         bpmAdjustValue: '0.5',
         timingAdjust: '0',
-        useSequencerTiming: false
-    };
+        useSequencerTiming: false    
+    }
+};
 
+// Initialize default settings for channels 1-16
+for (let i = 1; i <= 16; i++) {
+    channelSettings[i] = { ...channelSettings.all };
 }
 
+
+console.log("[channelSettings.js] Initialized default channel settings:", channelSettings);
+
+
 function captureSettings(selectedControlChannel) {    
-    const container = document.querySelector(`[data-control-channel-id="${selectedControlChannel}"]`);
+    const container = document.querySelector('.synth-container');
     
     if (!container) {
         console.error(`[channelSettings.js] No container found for controlChannelId: ${selectedControlChannel}`);
@@ -40,51 +37,46 @@ function captureSettings(selectedControlChannel) {
     
     console.log("[channelSettings.js] Found container for controlChannelId:", selectedControlChannel);
 
-    const settings = {
-        waveform: container.querySelector('#waveform')?.value,
-        note: container.querySelector('#note')?.value,
-        attack: container.querySelector('#attack')?.value,
-        release: container.querySelector('#release')?.value,
-        cutoff: container.querySelector('#cutoff')?.value,
-        resonance: container.querySelector('#resonance')?.value,
-        volume: container.querySelector('#volume')?.value,
-        arpPattern: container.querySelector('#arpPattern')?.value,
-        arpSpeed: container.querySelector('#arpSpeed')?.value,
-        arpTempo: container.querySelector('#arpTempo')?.value,
-        bpmAdjustValue: container.querySelector('#bpmAdjustValue')?.value,
-        timingAdjust: container.querySelector('#timingAdjust')?.value,
-        useSequencerTiming: container.querySelector('#useSequencerTiming')?.checked
-    };
+    const settingsKeys = Object.keys(channelSettings.all);
+    const settings = {};
+
+    settingsKeys.forEach(key => {
+        const element = container.querySelector(`#${key}`);
+        if (element) {
+            if (element.type === 'checkbox') {
+                settings[key] = element.checked;
+            } else {
+                settings[key] = element.value;
+            }
+        }
+    });
 
     console.log(`[channelSettings.js] Captured settings for controlChannelId ${selectedControlChannel}:`, settings);
 
-    if (!channelSettings[selectedControlChannel]) {
-        channelSettings[selectedControlChannel] = getDefaultSettings();
-    }
     channelSettings[selectedControlChannel] = { ...channelSettings[selectedControlChannel], ...settings };
 }
 
 function getSettings(controlChannel) {
     if (!channelSettings[controlChannel]) {
         console.warn(`[channelSettings.js] Using default settings for Control Channel ${controlChannel} as specific settings were not found.`);
-        return getDefaultSettings();
+        return { ...channelSettings.all };
     }
     console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, channelSettings[controlChannel]);
     return channelSettings[controlChannel];
 }
 
 
-function applySettings(controlChannelId, controlChannel) {
-    const settings = getSettings(controlChannel);
-    const container = document.querySelector(`[data-control-channel-id="${controlChannelId}"]`);
-    
-    if (!container) {
-        console.error(`[channelSettings.js] No element found with data-control-channel-id="${controlChannelId}"`);
+function applySettings(controlChannelId, selectedChannel) {
+    const settings = channelSettings[controlChannelId];
+    if (!settings) {
+        console.error(`[channelSettings.js] No settings found for controlChannelId="${controlChannelId}"`);
         return;
     }
 
-    console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${controlChannel}:`, settings);
+    console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 
+    // Define the container variable here
+    const container = document.querySelector('.synth-container');
 
     for (const [key, value] of Object.entries(settings)) {
         const element = container.querySelector(`#${key}`);
@@ -96,9 +88,8 @@ function applySettings(controlChannelId, controlChannel) {
             }
         }
     }
-    console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${controlChannel}:`, settings);
+    console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 }
-
 
 
 // Attach event listeners to update channelSettings in real-time
