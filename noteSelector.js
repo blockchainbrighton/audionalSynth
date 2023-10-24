@@ -76,4 +76,4 @@ document.addEventListener("keyup", function(e) {
     }
 });
 
-document.getElementById("arpToggle").addEventListener("click", toggleArpeggiator);
+document.getElementById("arpToggle").addEventListener("click", arp.toggleArpeggiator);

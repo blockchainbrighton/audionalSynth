@@ -23,9 +23,7 @@ for (let i = 1; i <= 16; i++) {
     channelSettings[i] = { ...channelSettings.all };
 }
 
-
 console.log("[channelSettings.js] Initialized default channel settings:", channelSettings);
-
 
 function captureSettings(selectedControlChannel) {    
     const container = document.querySelector('.synth-container');
@@ -55,11 +53,11 @@ function captureSettings(selectedControlChannel) {
 
     channelSettings[selectedControlChannel] = { ...channelSettings[selectedControlChannel], ...settings };
 
-   // Capture arpNotes for the selected channel
-   channelSettings[selectedControlChannel].arpNotes = arpNotesByChannel[selectedControlChannel];
+    // Capture arpNotes for the selected channel
+    channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
 
-   // Save to localStorage
-   localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
+    // Save to localStorage
+    localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
 }
 
 function getSettings(controlChannel) {
@@ -70,7 +68,6 @@ function getSettings(controlChannel) {
     console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, channelSettings[controlChannel]);
     return channelSettings[controlChannel];
 }
-
 
 function applySettings(controlChannelId, selectedChannel) {
     // Check localStorage for saved settings
@@ -86,12 +83,10 @@ function applySettings(controlChannelId, selectedChannel) {
     }
 
     // Apply the arpNotes for the selected channel
-    arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
-
+    arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
 
     console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 
-    // Define the container variable here
     const container = document.querySelector('.synth-container');
 
     for (const [key, value] of Object.entries(settings)) {
@@ -104,14 +99,13 @@ function applySettings(controlChannelId, selectedChannel) {
             }
         }
     }
+
     // Update the arp notes display after applying the settings
-    updateArpNotesDisplay();
+    arp.updateArpNotesDisplay();
 
     console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 }
 
-
-// Attach event listeners to update channelSettings in real-time
 document.addEventListener('change', function(e) {
     const element = e.target;
     const selectedControlChannel = element.closest('.control-channel-btn')?.getAttribute('data-control-channel-id');
@@ -121,8 +115,10 @@ document.addEventListener('change', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Clear localStorage for channelSettings
+    localStorage.removeItem('channelSettings');
+
     // Initialize the UI with default settings for the selected control channel
-    const defaultControlChannelId = 'all'; // Default to "all" since we're using buttons now
+    const defaultControlChannelId = 'all';
     applySettings(defaultControlChannelId, defaultControlChannelId);
 });
-

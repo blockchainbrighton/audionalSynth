@@ -2,31 +2,28 @@
 // saveLoad.js - save and load synth settings
 
 function initializeLocalStorage() {
-    // Check if 'channelSettings' key exists in localStorage
-    if (!localStorage.getItem('channelSettings')) {
-        // Define default settings
-        const defaultSettings = {
-            note: "51.91308719749314",
-            waveform: "sawtooth",
-            attack: "10",
-            release: "519",
-            cutoff: "2000",
-            resonance: "3.8",
-            volume: "1",
-            arpTempo: "120",
-            arpPattern: "up",
-            arpNotes: [] // or any default arpNotes you want
-        };
+    // Define default settings
+    const defaultSettings = {
+        note: "51.91308719749314",
+        waveform: "sawtooth",
+        attack: "10",
+        release: "519",
+        cutoff: "2000",
+        resonance: "3.8",
+        volume: "1",
+        arpTempo: "120",
+        arpPattern: "up",
+        arpNotes: [] // Initialize arpNotes as empty
+    };
 
-        // Initialize default settings for channels 1-16
-        const channelSettings = { all: { ...defaultSettings } };
-        for (let i = 1; i <= 16; i++) {
-            channelSettings[i] = { ...defaultSettings };
-        }
-
-        // Save default settings to localStorage
-        localStorage.setItem('channelSettings', JSON.stringify(defaultSettings));
+    // Initialize default settings for channels 1-16
+    const channelSettings = { all: { ...defaultSettings } };
+    for (let i = 1; i <= 16; i++) {
+        channelSettings[i] = { ...defaultSettings };
     }
+
+    // Save default settings to localStorage
+    localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
 }
 
 function saveSettings() {

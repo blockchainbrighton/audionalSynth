@@ -7,12 +7,14 @@ function getSelectedChannel() {
 }
 
 function playArpNotes() {
-    console.log("[playArpNotes] Function called.");
-
     let selectedChannel = getSelectedChannel();
-    let currentNotesArray = arpNotesByChannel[selectedChannel];
+    console.log("[playArpNotes] Function called.");
+    console.log("[playArpNotes] Current arpNotes:", arp.arpNotesByChannel[selectedChannel]); // Use arp. prefix
 
-    if (isArpeggiatorOn && currentNotesArray.length > 0) {
+    let currentNotesArray = arp.arpNotesByChannel[selectedChannel];
+
+    if (arp.isArpeggiatorOn && currentNotesArray.length > 0) { // Use arp. prefix
+      
         console.log("[playArpNotes] Arpeggiator is on and arpNotes are present.");
 
         if (isExternalModeActive) {
@@ -37,29 +39,30 @@ function playArpNotes() {
         }
 
         let pattern = document.getElementById("arpPattern").value;
-        console.log("[playArpNotes] Arpeggiator pattern:", pattern);
+        console.log("[playArpNotes - pattern] Arpeggiator pattern:", pattern);
+        console.log("[playArpNotes - arpPattern] Current arp pattern:", arpPattern);
 
         let baseInterval = 60 / parseFloat(document.getElementById("arpTempo").value) * 1000;
         console.log("[playArpNotes] Base interval (ms):", baseInterval);
 
         switch (pattern) {
             case 'up':
-                incrementArpIndex();
+                arp.incrementArpIndex(); // Use arp. prefix
                 break;
             case 'down':
-                decrementArpIndex();
+                arp.decrementArpIndex(); // Use arp. prefix
                 break;
             case 'random':
-                randomizeArpIndex();
+                arp.randomizeArpIndex(); // Use arp. prefix
                 break;
             case 'up-down':
-                upDownArpIndex();
+                arp.upDownArpIndex(); // Use arp. prefix
                 break;
             case 'double-step':
-                doubleStepArpIndex();
+                arp.doubleStepArpIndex(); // Use arp. prefix
                 break;
             case 'random-rest':
-                randomWithRestsArpIndex();
+                arp.randomWithRestsArpIndex(); // Use arp. prefix
                 break;
             default:
                 console.error("Unknown arpeggiator pattern:", pattern);
@@ -69,7 +72,7 @@ function playArpNotes() {
 
         baseInterval = applySpeedModifier(baseInterval);
         console.log("[playArpNotes] Base interval after speed modifier (ms):", baseInterval);
-
+        console.log("[playArpNotes] Current arp speed:", arpSpeed);
         let interval = baseInterval;
 
         // Overwrite BPM with Nudge if Nudge is active
@@ -87,13 +90,13 @@ function playArpNotes() {
         let scheduledTime = channel.context.currentTime + interval / 1000; // Convert to seconds                
         console.log("[playArpNotes] Scheduled time (in context time):", scheduledTime);
 
-        arpTimeout = setTimeout(() => {
-            nudgeApplied = false;
+        arpTimeout = setTimeout(() => { // Use arp. prefix
+            arp.nudgeApplied = false; // Use arp. prefix
             console.log("[playArpNotes] Timeout triggered. Calling playArpNotes again.");
             playArpNotes();
         }, interval);
     } else {
         console.log("[playArpNotes] Arpeggiator is off or arpNotes is empty.");
     }
-    updateArpNotesDisplay();
+    arp.updateArpNotesDisplay(); // Use arp. prefix
 }
