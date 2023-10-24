@@ -4,6 +4,11 @@ const channelSettings = {
     all: getDefaultSettings() // Default settings for "all" control channel
 };
 
+// Initialize default settings for channels 1-16
+for (let i = 1; i <= 16; i++) {
+    channelSettings[i] = getDefaultSettings();
+}
+
 console.log("[channelSettings.js] Initialized default channel settings:", channelSettings);
 
 function getDefaultSettings() {
@@ -51,7 +56,7 @@ function captureSettings(selectedControlChannel) {
         useSequencerTiming: container.querySelector('#useSequencerTiming')?.checked
     };
 
-    console.log(`[channelSettings.js] Captured settings for controlChannelId ${controlChannelId}:`, settings);
+    console.log(`[channelSettings.js] Captured settings for controlChannelId ${selectedControlChannel}:`, settings);
 
     if (!channelSettings[selectedControlChannel]) {
         channelSettings[selectedControlChannel] = getDefaultSettings();
