@@ -29,13 +29,3 @@ document.addEventListener('DOMContentLoaded', function() {
     applySettings(controlChannelId, selectedChannel);
 });
 
-function updateChannelMenu(channel) {
-    // Logic to update the selected channel menu based on the selected channel
-    // This will depend on how your current system is set up
-    // For example:
-    if (channel === 'all') {
-        // Update settings for all channels
-    } else {
-        // Update settings for the specific channel
-    }
-}
