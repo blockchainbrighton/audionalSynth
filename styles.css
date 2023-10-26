@@ -1,81 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #2d2d2d;
+    color: #efefef;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Changed to flex-start */
+    min-height: 100vh; /* Ensure minimum height is full viewport */
+    background-image: linear-gradient(to top, #2d2d2d, #434343);
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2d2d2d;
-            color: #efefef;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-image: linear-gradient(to top, #2d2d2d, #434343);
-        }
+.synth-container {
+    background-color: #4a4a4a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 150, 150, 0.5);
+    width: 80%; /* Adjusted width */
+    margin-top: 20px; /* Added margin to separate from top elements */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+}
 
-        .synth-container {
-            background-color: #4a4a4a;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 150,  kicker0.5);
-            width: 50%;  /* Expand the width */
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-around;
-            flex-wrap: wrap; /* Allow wrapping for smaller screens */
-        }
+button {
+    background-color: #2d2d2d;
+    color: #0fafff;
+    border: none;
+    padding: 5px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color .3s;
+}
 
-        button {
-            background-color: #2d2d2d;
-            color: #0fafff;
-            border: none;
-            padding: 5px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-            transition: background-color .3s;
-        }
+label {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    justify-content: space-between;
+    width: 100%;
+}
 
+.dropdown-container, .control-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 100%;
+    margin: 5px 0;
+}
 
-        label {
-            display: flex;
-            align-items: center;
-            margin: 5px 0;
-            justify-content: space-between;
-            width: 100%;
-        }
+.arpeggiator-controls {
+    width: 100%;
+    margin: 10px 0;
+}
 
-        .dropdown-container, .control-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            width: 100%;
-            margin: 5px 0;
-        }
+input[type=range], select, input[type=number], input[type=checkbox] {
+    margin-left: 10px;
+}
 
-        .arpeggiator-controls {
-            width: 100%;
-            margin: 10px 0;
-        }
+.control-channel-btn {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    background-color: #6b6a6a;
+    cursor: pointer;
+    transition: transform 0.3s; /* Smooth transition for the magnify effect */
+}
 
-        input[type=range], select, input[type=number], input[type=checkbox] {
-            margin-left: 10px;
-        }
+.control-channel-btn:hover {
+    transform: scale(1.1); /* Magnify the button by 10% on hover */
+}
 
-        .control-channel-btn {
-            padding: 10px 15px;
-            margin: 5px;
-            border: none;
-            background-color: #6b6a6a;
-            cursor: pointer;
-            transition: transform 0.3s; /* Smooth transition for the magnify effect */
-        }
-        
-        .control-channel-btn:hover {
-            transform: scale(1.1); /* Magnify the button by 10% on hover */
-        }
-        
-        .control-channel-btn.active {
-            background-color: #ffffff;
-            color: #000000;
-        }
-        
+.control-channel-btn.active {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+#effectsModal {
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #f3f3f3;
+    box-shadow: -5px 0px 5px 0px rgba(0,0,0,0.2);
+    overflow: auto;
+    padding: 20px;
+}

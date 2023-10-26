@@ -1,18 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audional Synth</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="modalStyles.css">
 </head>
-
 <body>
-    <h2>Audional Synth</h2>
-    <div class="synth-container">
-        <div class="dropdown-container">
+  
+    <h2 style="text-align: center;">Audional Synth</h2>
+    <button id="toggleEffectsButton" onclick="toggleEffectsModal()">Show Effects</button>
+
+    <div class="synth-container" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border: 2px solid red; height: 450px;">
+     <!-- Save Load Container -->
+ <div class="save-load-container" style="position: relative; top: -0px; left: 0px; border: 2px solid rgb(0, 156, 253); width: 125px; height: 50px;">
+
+    <button onclick="saveSettings()">Save Settings</button>
+    <button onclick="loadSettings()">Load Settings</button>
+    </div>
+        <!-- Channel Selection Container -->
+        <div class="channel-selection-container" style="position: relative; top: 0px; left: 0px; border: 2px solid orange; width: 930px; height: 50px;">
+            <button class="control-channel-btn active" data-channel="all" data-control-channel-id="all">All Channels</button>
+            <!-- Loop to generate buttons for channels 1-16 -->
+            <script>
+                for (let i = 1; i <= 16; i++) {
+                    document.write(`<button class="control-channel-btn" data-channel="${i}" data-control-channel-id="${i}">${i}</button>`);
+                }
+            </script>
+        </div>
+
+        <!-- Synthesizer Control Panel Container -->
+        <div class="control-panel-container" style="position: relative; top: 40px; left: 10px; border: 2px solid pink; width: 250px; height: 300px;">
+
+            <h3>Synth Controls</h3>
             
+<!-- Waveform and Note Selection Container -->
+        <div class="waveform-note-container" style="position: relative; top: -10px; left: 25px; border: 2px solid blue; width: 200px; height: 55px;">
             <label>
                 Waveform:
                 <select id="waveform">
@@ -22,22 +46,14 @@
                     <option value="pulse">Pulse</option>
                 </select>
             </label>
-            <label>
-                Note:
-                <select id="note"></select>
-            </label>
-            <div id="control-channel-buttons">
-                <button class="control-channel-btn active" data-channel="all" data-control-channel-id="all">All Channels</button>
-                <!-- Loop to generate buttons for channels 1-16 -->
-                <script>
-                    for (let i = 1; i <= 16; i++) {
-                        document.write(`<button class="control-channel-btn" data-channel="${i}" data-control-channel-id="${i}">${i}</button>`);
-                    }
-                </script>
-            </div>         
-            <button onclick="playMS10TriangleBass()">Play Note</button>
-        </div>
-        <div class="control-container">
+    <label>
+        <button onclick="playMS10TriangleBass()">Play Note:</button>
+        <select id="note">
+            <option value="C1" selected>C1</option>
+            <!-- Add other note options here -->
+        </select>
+    </label>
+</div>
             <div>
                 <label>Attack (ms): <input id="attack" max="2000" min="0" type="range" value="10"></label>
                 <label>Release (ms): <input id="release" max="2000" min="0" type="range" value="500"></label>
@@ -49,9 +65,12 @@
             <div>
                 <label>Volume: <input id="volume" max="100" min="0" type="range" value="100"></label>
             </div>
+
         </div>
-        <div class="arpeggiator-controls">
-            <h3>Arpeggiator</h3>
+
+        <!-- Arpeggiator Controls Container -->
+        <div class="arpeggiator-container" style="position: relative; top: 20px; left: -25px; border: 2px solid cyan; width: 400px; height: 250px;">
+            <h3>Arpeggiator Controls</h3>
             <div>
                 <button id="arpToggle">Toggle Arpeggiator</button>
                 <button id="playArp">Play Arp</button>
@@ -83,32 +102,69 @@
                     </select>
                 </label>
             </div>
-        </div>
-        <div>
             <label for="timingAdjust">Timing Adjust (%): <input id="timingAdjust" max="10" min="-10" type="range" value="0" onmouseup="resetTimingAdjust()"></label>
-            <canvas height="60" id="arpNotesDisplay" width="300"></canvas>
         </div>
-        <div>
-            <label>
-                <button onclick="toggleSequencerSimulator()">Start Sequencer Simulator</button>
+
+      
+ 
+
+        <!-- Sequencer Timing Container -->
+        <div class="sequencer-timing-container" style="position: relative; top: 200px; left: -450px; border: 2px solid yellow; width: 300px; height: 50px;">
+           
+            <div>
                 <input type="checkbox" id="useSequencerTiming" value="useSequencerTiming"> Use Sequencer Timing
-            </label>
-            <button onclick="saveSettings()">Save Settings</button>
-            <button onclick="loadSettings()">Load Settings</button>
+                <br>
+                <label>
+                <button onclick="toggleSequencerSimulator()">Start Sequencer Simulator</button>
+                </label>
+            </div>
+        </div>
+
+          
+       
+       <!-- Array Display Container -->
+        <div class="array-display-container" style="position: relative; top: -260px; left: 350px; border: 2px solid red; width: 300px; height: 300px;">
+            <h3 id="channelHeading">Channel (arp.currentChannel) Arp Array</h3>
+            <canvas height="30" id="arpNotesDisplay" width="400"></canvas>
+        </div>
+
+ 
+
+     <!-- Effects Modal Container -->
+    <div id="effectsModal" style="position: absolute; top: 0px; left: 950px; display: none; border: 2px solid purple; width: 200px; height: 350px;">
+        <div id="reverbUI">
+            <h3>Reverb Effect</h3>
+            <label for="duration">Duration:</label>
+            <input type="range" id="duration" min="0.1" max="5" step="0.1">
+            <label for="decay">Decay:</label>
+            <input type="range" id="decay" min="0.1" max="5" step="0.1">
+            <button id="applyReverb" onclick="toggleEffect(this, 'Reverb')">Reverb Off</button>
+        </div>
+        
+        <div id="delayUI">
+            <h3>Delay Effect</h3>
+            <label for="time">Time:</label>
+            <input type="range" id="time" min="0.1" max="2" step="0.1">
+            <label for="feedback">Feedback:</label>
+            <input type="range" id="feedback" min="0" max="1" step="0.1">
+            <button id="applyDelay" onclick="toggleEffect(this, 'Delay')">Delay Off</button>
         </div>
     </div>
-        <script src="arpeggiator.js"></script>
-        <script src="channelSettings.js"></script>
-        <script src="controlChannels.js"></script>
-        <script src="main.js"></script>
-        <script src="eventListeners.js"></script>
-        <script src="midiControl.js"></script>
-        <script src="simulatedTiming.js"></script>
-        <script src="timing.js"></script>
-        <script src="saveLoad.js"></script>
-        <script src="noteSelector.js"></script>
-        <script src="synth.js"></script>
-       
-</body>
+           
 
+    <!-- Scripts -->
+    <script src="effectsModal.js"></script>
+    <script src="audionalSynthOptimizationTests.js"></script>
+    <script src="arpeggiator.js"></script>
+    <script src="channelSettings.js"></script>
+    <script src="controlChannels.js"></script>
+    <script src="main.js"></script>
+    <script src="eventListeners.js"></script>
+    <script src="midiControl.js"></script>
+    <script src="simulatedTiming.js"></script>
+    <script src="timing.js"></script>
+    <script src="saveLoad.js"></script>
+    <script src="noteSelector.js"></script>
+    <script src="synth.js"></script>
+</body>
 </html>

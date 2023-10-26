@@ -70,3 +70,21 @@ label, .dropdown-container, .control-container {
 input[type=range], select, input[type=number], input[type=checkbox] {
     margin-left: var(--input-margin-left);
 }
+
+.control-channel-btn {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    background-color: #6b6a6a;
+    cursor: pointer;
+    transition: transform 0.3s; /* Smooth transition for the magnify effect */
+}
+
+.control-channel-btn:hover {
+    transform: scale(1.1); /* Magnify the button by 10% on hover */
+}
+
+.control-channel-btn.active {
+    background-color: #ffffff;
+    color: #000000;
+}

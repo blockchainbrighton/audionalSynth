@@ -1,0 +1,72 @@
+#effectsModal {
+    display: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 30%;
+    height: 100%;
+    background-color: #1e1e1e; /* Dark background for a sci-fi look */
+    box-shadow: -5px 0px 5px 0px rgba(0,0,0,0.2);
+    overflow: auto;
+    padding: 20px;
+    color: #0fafff; /* Futuristic blue text color */
+    border-left: 3px solid #0fafff; /* Blue border on the left */
+}
+
+#effectsModal h3 {
+    color: #0fafff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+#effectsModal label {
+    color: #efefef;
+}
+
+#effectsModal input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 5px;
+    background: #333;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+#effectsModal input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #0fafff;
+    cursor: pointer;
+}
+
+#effectsModal input[type=range]::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    background: #0fafff;
+    cursor: pointer;
+}
+
+#effectsModal button {
+    background-color: #2d2d2d;
+    color: #0fafff;
+    border: 1px solid #0fafff;
+    padding: 5px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color .3s;
+}
+
+#effectsModal button:hover {
+    background-color: #0fafff;
+    color: #ffffff;
+}
+
+.effect-on {
+    background-color: #0fafff; /* Light up color */
+    color: #ffffff;
+}

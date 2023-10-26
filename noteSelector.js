@@ -9,18 +9,31 @@ for (let e = 0; e < keyNames.length; e++) {
 }
 console.log("[INIT] keyToMidiNote mapping:", keyToMidiNote);
 
+// Pre-calculated table for note names and frequencies
+const noteFrequencyTable = {};
+let octave = 0;
+let noteIndex = 0;
 
-window.noteNameToFrequency = function(t, o) {
-    const n = musicalNotes.indexOf(t) + 12 * (o + 1);
-    const freq = 440 * Math.pow(2, (n - 69) / 12);
-    console.log(`[CONVERT] Note: ${t}${o} to Frequency: ${freq}`);
-    return freq;
+for (let i = 0; i < 88; i++) {
+    const frequency = 440 * Math.pow(2, (i - 49) / 12);
+    const noteName = `${musicalNotes[noteIndex]}${octave}`;
+    noteFrequencyTable[noteName] = frequency;
+
+    noteIndex++;
+    if (noteIndex >= 12) {
+        noteIndex = 0;
+        octave++;
+    }
 }
 
-window.frequencyToNoteName = function(t) {
-    let o = Math.round(12 * Math.log2(t / 440) + 69);
-    const noteName = musicalNotes[o % 12] + (Math.floor(o / 12) - 1);
-    console.log(`[CONVERT] Frequency: ${t} to Note: ${noteName}`);
+window.noteNameToFrequency = function(noteName) {
+    console.log(`[CONVERT] Note: ${noteName} to Frequency: ${noteFrequencyTable[noteName]}`);
+    return noteFrequencyTable[noteName];
+}
+
+window.frequencyToNoteName = function(frequency) {
+    const noteName = Object.keys(noteFrequencyTable).find(key => noteFrequencyTable[key] === frequency);
+    console.log(`[CONVERT] Frequency: ${frequency} to Note: ${noteName}`);
     return noteName;
 }
 

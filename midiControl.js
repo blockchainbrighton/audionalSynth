@@ -23,7 +23,7 @@ function onMIDIMessage(e) {
     console.log("[onMIDIMessage] MIDI Channel:", midiChannel);
     let note = e.data[1];
     let velocity = e.data.length > 2 ? e.data[2] : 0;
-    let selectedChannel = getSelectedChannel();
+    let selectedChannel = arp.getSelectedChannel();
     console.log("[onMIDIMessage] Selected Control Channel:", selectedChannel);
     
     switch (status & 0xF0) {  // Using bitwise AND to mask the channel bits

@@ -36,6 +36,9 @@ function playMS10TriangleBass(frequency = null, channelNumber = 1) {
         }
     }
     
+    // Log the frequency and its channel
+    console.log(`[PLAY] Frequency: ${frequency}, Channel: ${channelNumber}`);
+    
     osc.frequency.setValueAtTime(frequency, context.currentTime);
     
     let attack = document.getElementById("attack").value / 1000,
