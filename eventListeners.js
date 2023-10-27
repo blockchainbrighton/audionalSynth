@@ -1,7 +1,6 @@
  // eventListeners.js
         // Assign the playArp function to the button
-        document.getElementById("playArp").addEventListener("click", arp.playArpeggiator);
-        document.getElementById("pauseArp").addEventListener("click", arp.pauseArpeggiator);
+        document.getElementById("pauseArp").addEventListener("click", arpUI.pauseArpeggiator);
 
        
 

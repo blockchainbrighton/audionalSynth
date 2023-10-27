@@ -81,13 +81,17 @@ document.addEventListener("keydown", function(e) {
         const n = 440 * Math.pow(2, (o - 69) / 12);
         console.log(`[KEYDOWN] Key: ${e.code}, MIDI note: ${o}, Frequency: ${n}`);
         
-        let selectedChannel = arp.getSelectedChannel(); // Get the currently selected control channel
+        let selectedChannel = arpUI.getSelectedChannel();
         console.log(`[KEYDOWN] Selected Channel: ${selectedChannel}`);
 
-        playMS10TriangleBass(n, selectedChannel); // Pass the selected control channel instead of the MIDI channel
-        arp.arpNotesByChannel[selectedChannel].push(n);
-        console.log(`[KEYDOWN] arpNotesByChannel after push:`, arp.arpNotesByChannel);
-        arp.updateArpNotesDisplay();
+        if (arpUI.arpNotesByChannel[selectedChannel]) {
+            playMS10TriangleBass(n, selectedChannel);
+            arpUI.arpNotesByChannel[selectedChannel].push(n);
+            console.log(`[KEYDOWN] arpNotesByChannel after push:`, arpUI.arpNotesByChannel);
+            arpUI.updateArpNotesDisplay();
+        } else {
+            console.error(`Selected channel '${selectedChannel}' is not valid or uninitialized.`);
+        }
     }
 });
 

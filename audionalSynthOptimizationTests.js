@@ -80,4 +80,18 @@ function runAllTests() {
     console.log("All tests completed.");
 }
 
+function testMultiChannelSoundQuality() {
+    console.log("Testing multi-channel sound quality...");
+    
+    // Test playing sound on multiple channels
+    for (let i = 1; i <= 16; i++) {
+        playMS10TriangleBass(440 + i * 10, i);
+    }
+
+    console.log("Multi-channel sound quality test completed.");
+}
+
+
+
+
 // Note: These tests are basic and may need to be adjusted based on the actual implementation details of the Audional Synth application.

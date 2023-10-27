@@ -1,19 +1,14 @@
-// controlChannels.js
-
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
     const controlChannelButtons = document.querySelectorAll('.control-channel-btn');
     controlChannelButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             const selectedControlChannel = e.target.getAttribute('data-control-channel-id');
-            arp.currentChannel = selectedControlChannel;  // Update the currentChannel property
+            arpUI.currentChannel = selectedControlChannel;  // Update the currentChannel property
 
-            console.log(`[controlChannels.js] Updated currentChannel to:`, arp.currentChannel);
+            console.log(`[controlChannels.js] Updated currentChannel to:`, arpUI.currentChannel);
 
-        
             if (!selectedControlChannel) {
-                console.error("[channelSettings.js] Missing selectedControlChannel");
+                console.error("[controlChannels.js] Missing selectedControlChannel");
                 return;
             }
 
@@ -25,11 +20,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
 
             // 2. Switch to the new channel
-            // Remove active class from all buttons
             document.querySelectorAll('.control-channel-btn.active').forEach(activeButton => {
                 activeButton.classList.remove('active');
             });
-            // Add active class to the clicked button
             e.target.classList.add('active');
 
             // 3. Apply settings of the new channel after switching
@@ -39,8 +32,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Initialize the UI with default settings for the selected control channel
     const defaultChannelButton = document.querySelector('.control-channel-btn');
-    const controlChannelId = defaultChannelButton.getAttribute('data-control-channel-id');
-    const selectedChannel = defaultChannelButton.getAttribute('data-channel');
-    applySettings(controlChannelId, selectedChannel);
+    if (defaultChannelButton) {
+        const controlChannelId = defaultChannelButton.getAttribute('data-control-channel-id');
+        const selectedChannel = defaultChannelButton.getAttribute('data-channel');
+        applySettings(controlChannelId, selectedChannel);
+    }
 });
-

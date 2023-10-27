@@ -1,5 +1,3 @@
-// channelSettings.js
-
 const channelSettings = {
     all: {
         waveform: 'sawtooth',
@@ -27,8 +25,6 @@ console.log("[channelSettings.js] Initialized default channel settings:", channe
 
 function captureSettings(selectedControlChannel) {    
     const container = document.querySelector('.synth-container');
-
-    
     if (!container) {
         console.error(`[channelSettings.js] No container found for controlChannelId: ${selectedControlChannel}`);
         return;
@@ -42,11 +38,7 @@ function captureSettings(selectedControlChannel) {
     settingsKeys.forEach(key => {
         const element = container.querySelector(`#${key}`);
         if (element) {
-            if (element.type === 'checkbox') {
-                settings[key] = element.checked;
-            } else {
-                settings[key] = element.value;
-            }
+            settings[key] = element.type === 'checkbox' ? element.checked : element.value;
         }
     });
 
@@ -56,23 +48,20 @@ function captureSettings(selectedControlChannel) {
 
     // Capture arpNotes for the selected channel
     if (selectedControlChannel !== "all") {
-        channelSettings[selectedControlChannel].arpNotes = arp.arpNotesByChannel[selectedControlChannel];
-        arp.updateAllChannel();
+        channelSettings[selectedControlChannel].arpNotes = arpUI.arpNotesByChannel[selectedControlChannel];
+        arpUI.updateAllChannel();
     }
 
-    console.log(`[channelSettings.js] arpNotes for channel ${selectedControlChannel}:`, arp.arpNotesByChannel[selectedControlChannel]);
+    console.log(`[channelSettings.js] arpNotes for channel ${selectedControlChannel}:`, arpUI.arpNotesByChannel[selectedControlChannel]);
 
     // Save to localStorage
     localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
 }
 
 function getSettings(controlChannel) {
-    if (!channelSettings[controlChannel]) {
-        console.warn(`[channelSettings.js] Using default settings for Control Channel ${controlChannel} as specific settings were not found.`);
-        return { ...channelSettings.all };
-    }
-    console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, channelSettings[controlChannel]);
-    return channelSettings[controlChannel];
+    const settings = channelSettings[controlChannel] || { ...channelSettings.all };
+    console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, settings);
+    return settings;
 }
 
 function applySettings(controlChannelId, selectedChannel) {
@@ -82,40 +71,19 @@ function applySettings(controlChannelId, selectedChannel) {
         Object.assign(channelSettings, savedSettings);
     }
 
-    const settings = channelSettings[controlChannelId];
-    if (!settings) {
-        console.error(`[channelSettings.js] No settings found for controlChannelId="${controlChannelId}"`);
-        return;
-    }
-
-    // Apply the arpNotes for the selected channel
-    arp.arpNotesByChannel[controlChannelId] = settings.arpNotes || [];
-    arp.updateAllChannel();
-    console.log("[applySettings] Updated arpNotes for all channel:", channelSettings["all"].arpNotesByChannel);
-
-
-
+    const settings = getSettings(controlChannelId);
     console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 
     const container = document.querySelector('.synth-container');
-
     for (const [key, value] of Object.entries(settings)) {
         const element = container.querySelector(`#${key}`);
         if (element) {
-            if (element.type === 'checkbox') {
-                element.checked = value;
-            } else {
-                element.value = value;
-            }
+            element.type === 'checkbox' ? element.checked = value : element.value = value;
         }
     }
 
-
     // Update the arp notes display after applying the settings
-    arp.updateArpNotesDisplay();
-
-    console.log(`[channelSettings.js] arpNotes after applying settings for channel ${controlChannelId}:`, arp.arpNotesByChannel[controlChannelId]);
-
+    arpUI.updateArpNotesDisplay();
 
     console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 }
@@ -129,10 +97,7 @@ document.addEventListener('change', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Clear localStorage for channelSettings
-    localStorage.removeItem('channelSettings');
-
-    // Initialize the UI with default settings for the selected control channel
+    localStorage.removeItem('channelSettings'); // Clear localStorage for channelSettings
     const defaultControlChannelId = 'all';
-    applySettings(defaultControlChannelId, defaultControlChannelId);
+    applySettings(defaultControlChannelId, defaultControlChannelId); // Initialize the UI with default settings
 });
