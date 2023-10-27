@@ -12,6 +12,11 @@ body {
     background-image: linear-gradient(to top, #2d2d2d, #434343);
 }
 
+/* Center all h3 text */
+h3 {
+    text-align: center;
+}
+
 .synth-container {
     background-color: #4a4a4a;
     padding: 20px;

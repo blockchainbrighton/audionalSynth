@@ -1,5 +1,4 @@
-// To run the test
-testMultiChannelSoundQuality();
+
 
 // testMs10.js
 
