@@ -275,6 +275,10 @@ playArpNotes(channels = []) {
     }
 
     updateArpNotesDisplay() {
+        if (!this.arpNotesByChannel) {
+            console.error("arpNotesByChannel is undefined");
+            return;
+        }
         const canvas = document.getElementById("arpNotesDisplay");
         const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -301,7 +305,9 @@ playArpNotes(channels = []) {
 }
 
 // Create an instance of the Arpeggiator class
+console.log(`[Arpeggiator] Initializing arpUI at ${new Date().toLocaleTimeString()}`);
 const arpUI = new Arpeggiator();
 arpUI.setCurrentChannel('1'); // This will update the heading to "Channel 1 Arp Array"
 document.getElementById("playArp").addEventListener("click", () => arpUI.startArpeggiator());
 document.getElementById("arpToggle").addEventListener("click", () => arpUI.toggleArpeggiator());
+console.log(`[Arpeggiator] arpUI initialized at ${new Date().toLocaleTimeString()}`);

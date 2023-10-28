@@ -1,11 +1,12 @@
+// controlChannels.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const controlChannelButtons = document.querySelectorAll('.control-channel-btn');
     controlChannelButtons.forEach(button => {
         button.addEventListener('click', function(e) {
             const selectedControlChannel = e.target.getAttribute('data-control-channel-id');
-            arpUI.currentChannel = selectedControlChannel;  // Update the currentChannel property
 
-            console.log(`[controlChannels.js] Updated currentChannel to:`, arpUI.currentChannel);
+            arpUI.currentChannel = selectedControlChannel;  // Update the currentChannel property
 
             if (!selectedControlChannel) {
                 console.error("[controlChannels.js] Missing selectedControlChannel");

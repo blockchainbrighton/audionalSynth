@@ -30,6 +30,8 @@ class ChannelSettingsManager {
     }
 
     captureSettings(selectedControlChannel, container) {
+        console.log("[ChannelSettingsManager] captureSettings called for channel:", selectedControlChannel);
+
         const settingsKeys = Object.keys(this.defaultSettings);
         const settings = {};
 
@@ -56,6 +58,8 @@ class ChannelSettingsManager {
     }
 
     applySettings(controlChannelId, selectedChannel, container, updateArpNotesDisplay) {
+        console.log("[ChannelSettingsManager] applySettings called for channel:", controlChannelId);
+
         const savedSettings = JSON.parse(localStorage.getItem('channelSettings'));
         if (savedSettings) {
             Object.assign(this.settings, savedSettings);
@@ -72,8 +76,12 @@ class ChannelSettingsManager {
         }
 
         // Update the arp notes display after applying the settings
-        updateArpNotesDisplay();
+        console.log("[ChannelSettingsManager] Before calling updateArpNotesDisplay");
 
+        if (typeof updateArpNotesDisplay === 'function' && arpUI) {
+            updateArpNotesDisplay();
+        }
+    
         console.log(`[ChannelSettingsManager] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
     }
 }

@@ -10,6 +10,8 @@ settingsManager.initializeDefaultSettings();
 console.log("[channelSettings.js] Initialized default channel settings:", settingsManager.getSettings());
 
 function captureSettings(selectedControlChannel) {    
+    console.log("[channelSettings.js] captureSettings called for channel:", selectedControlChannel);
+
     const container = document.querySelector('.synth-container');
     if (!container) {
         console.error(`[channelSettings.js] No container found for controlChannelId: ${selectedControlChannel}`);
@@ -19,25 +21,22 @@ function captureSettings(selectedControlChannel) {
     console.log("[channelSettings.js] Found container for controlChannelId:", selectedControlChannel);
 
     // Delegate the capturing of settings to settingsManager
-    settingsManager.captureChannelSettings(selectedControlChannel, container);
+    settingsManager.captureSettings(selectedControlChannel, container);
 
     // Capture arpNotes for the selected channel
     if (selectedControlChannel !== "all") {
         const arpNotes = arpUI.arpNotesByChannel[selectedControlChannel];
         settingsManager.updateArpNotes(selectedControlChannel, arpNotes);
-        arpUI.updateAllChannel();
-    }
+        console.log("[channelSettings.js] arpUI before update:", arpUI);
 
-    // Save to localStorage
-    localStorage.setItem('channelSettings', JSON.stringify(settingsManager.getSettings()));
+        arpUI.updateAllChannel();
+
+        console.log("[channelSettings.js] arpUI after update:", arpUI);
+    }
 }
 
 function applySettings(controlChannelId, selectedChannel) {
-    // Check localStorage for saved settings
-    const savedSettings = JSON.parse(localStorage.getItem('channelSettings'));
-    if (savedSettings) {
-        settingsManager.applySettings(savedSettings);
-    }
+    console.log("[channelSettings.js] applySettings called for channel:", controlChannelId);
 
     // Delegate the applying of settings to settingsManager
     const container = document.querySelector('.synth-container');
@@ -46,11 +45,6 @@ function applySettings(controlChannelId, selectedChannel) {
     } else {
         console.error("Container element not found for applying settings.");
     }
-
-    // Update the arp notes display after applying the settings
-    if (arpUI && arpUI.arpNotesByChannel) {
-    arpUI.updateArpNotesDisplay();
-}
 }
 
 document.addEventListener('change', function(e) {
@@ -62,7 +56,6 @@ document.addEventListener('change', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    localStorage.removeItem('channelSettings'); // Clear localStorage for channelSettings
     const defaultControlChannelId = 'all';
     applySettings(defaultControlChannelId, defaultControlChannelId); // Initialize the UI with default settings
 });
