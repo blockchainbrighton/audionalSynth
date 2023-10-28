@@ -84,7 +84,7 @@ document.addEventListener("keydown", function(e) {
         let selectedChannel = arpUI.getSelectedChannel();
         console.log(`[KEYDOWN] Selected Channel: ${selectedChannel}`);
 
-        if (arpUI.arpNotesByChannel[selectedChannel]) {
+        if (arpUI && arpUI.arpNotesByChannel) {
             playMS10TriangleBass(n, selectedChannel);
             arpUI.arpNotesByChannel[selectedChannel].push(n);
             console.log(`[KEYDOWN] arpNotesByChannel after push:`, arpUI.arpNotesByChannel);

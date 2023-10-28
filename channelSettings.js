@@ -48,7 +48,9 @@ function applySettings(controlChannelId, selectedChannel) {
     }
 
     // Update the arp notes display after applying the settings
+    if (arpUI && arpUI.arpNotesByChannel) {
     arpUI.updateArpNotesDisplay();
+}
 }
 
 document.addEventListener('change', function(e) {

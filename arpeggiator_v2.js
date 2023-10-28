@@ -1,6 +1,5 @@
 // arpeggiator_v2.js
 
-// arpeggiator.js
 
 
 class Arpeggiator {
