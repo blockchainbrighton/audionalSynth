@@ -1,27 +1,13 @@
-const channelSettings = {
-    all: {
-        waveform: 'sawtooth',
-        note: 'defaultNote',
-        attack: '10',
-        release: '500',
-        cutoff: '2000',
-        resonance: '5',
-        volume: '100',
-        arpPattern: 'up',
-        arpSpeed: 'normal',
-        arpTempo: '105',
-        bpmAdjustValue: '0.5',
-        timingAdjust: '0',
-        useSequencerTiming: false    
-    }
-};
+// channelSettings.js
 
-// Initialize default settings for channels 1-16
-for (let i = 1; i <= 16; i++) {
-    channelSettings[i] = { ...channelSettings.all };
-}
+// Importing the ChannelSettingsManager functionality
+// Make sure that ChannelSettingsManager.js is loaded before this script in your HTML
+const settingsManager = new ChannelSettingsManager();
 
-console.log("[channelSettings.js] Initialized default channel settings:", channelSettings);
+// Initial setup: load default settings for all channels
+settingsManager.initializeDefaultSettings();
+
+console.log("[channelSettings.js] Initialized default channel settings:", settingsManager.getSettings());
 
 function captureSettings(selectedControlChannel) {    
     const container = document.querySelector('.synth-container');
@@ -32,60 +18,37 @@ function captureSettings(selectedControlChannel) {
     
     console.log("[channelSettings.js] Found container for controlChannelId:", selectedControlChannel);
 
-    const settingsKeys = Object.keys(channelSettings.all);
-    const settings = {};
-
-    settingsKeys.forEach(key => {
-        const element = container.querySelector(`#${key}`);
-        if (element) {
-            settings[key] = element.type === 'checkbox' ? element.checked : element.value;
-        }
-    });
-
-    console.log(`[channelSettings.js] Captured settings for controlChannelId ${selectedControlChannel}:`, settings);
-
-    channelSettings[selectedControlChannel] = { ...channelSettings[selectedControlChannel], ...settings };
+    // Delegate the capturing of settings to settingsManager
+    settingsManager.captureChannelSettings(selectedControlChannel, container);
 
     // Capture arpNotes for the selected channel
     if (selectedControlChannel !== "all") {
-        channelSettings[selectedControlChannel].arpNotes = arpUI.arpNotesByChannel[selectedControlChannel];
+        const arpNotes = arpUI.arpNotesByChannel[selectedControlChannel];
+        settingsManager.updateArpNotes(selectedControlChannel, arpNotes);
         arpUI.updateAllChannel();
     }
 
-    console.log(`[channelSettings.js] arpNotes for channel ${selectedControlChannel}:`, arpUI.arpNotesByChannel[selectedControlChannel]);
-
     // Save to localStorage
-    localStorage.setItem('channelSettings', JSON.stringify(channelSettings));
-}
-
-function getSettings(controlChannel) {
-    const settings = channelSettings[controlChannel] || { ...channelSettings.all };
-    console.log(`[channelSettings.js] Retrieved settings for Control Channel ${controlChannel}:`, settings);
-    return settings;
+    localStorage.setItem('channelSettings', JSON.stringify(settingsManager.getSettings()));
 }
 
 function applySettings(controlChannelId, selectedChannel) {
     // Check localStorage for saved settings
     const savedSettings = JSON.parse(localStorage.getItem('channelSettings'));
     if (savedSettings) {
-        Object.assign(channelSettings, savedSettings);
+        settingsManager.applySettings(savedSettings);
     }
 
-    const settings = getSettings(controlChannelId);
-    console.log(`[channelSettings.js] Applying settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
-
+    // Delegate the applying of settings to settingsManager
     const container = document.querySelector('.synth-container');
-    for (const [key, value] of Object.entries(settings)) {
-        const element = container.querySelector(`#${key}`);
-        if (element) {
-            element.type === 'checkbox' ? element.checked = value : element.value = value;
-        }
+    if (container) {
+        settingsManager.applySettings(controlChannelId, selectedChannel, container, arpUI.updateArpNotesDisplay);
+    } else {
+        console.error("Container element not found for applying settings.");
     }
 
     // Update the arp notes display after applying the settings
     arpUI.updateArpNotesDisplay();
-
-    console.log(`[channelSettings.js] Applied settings for controlChannelId ${controlChannelId}, Control Channel ${selectedChannel}:`, settings);
 }
 
 document.addEventListener('change', function(e) {

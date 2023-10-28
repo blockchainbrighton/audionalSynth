@@ -1,16 +1,23 @@
 // effectsModalTests.js
 
-function testEffectsModalToggle() {
-    const effectsModal = new EffectsModal(); // Replace with actual instantiation
-    effectsModal.toggleModal();
-    assert.strictEqual(effectsModal.isModalOpen, true, 'Effects modal should open and close correctly');
+
+function testToggleEffectsModal() {
+    const modal = document.getElementById("effectsModal");
+    const initialDisplay = modal.style.display;
+
+    toggleEffectsModal(); // Function from effectsModal.js
+    const newDisplay = modal.style.display;
+
+    console.assert(initialDisplay !== newDisplay, 'toggleEffectsModal should show/hide the effects modal');
 }
 
-function testEffectApplication() {
-    const effectsModal = new EffectsModal(); // Replace with actual instantiation
-    effectsModal.applyEffect('reverb'); // Replace with actual effect
-    assert.strictEqual(effectsModal.isEffectApplied('reverb'), true, 'Applying an effect should alter audio output');
-}
+function testToggleEffect() {
+    const dummyButton = document.createElement('button');
+    dummyButton.classList.add('effect-on'); // Simulate an effect being on
+    const effectName = 'Reverb';
 
-testEffectsModalToggle();
-testEffectApplication();
+    toggleEffect(dummyButton, effectName); // Function from effectsModal.js
+    const isEffectOn = dummyButton.classList.contains('effect-on');
+
+    console.assert(!isEffectOn, 'toggleEffect should toggle the effect off');
+}

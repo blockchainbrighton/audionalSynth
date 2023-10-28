@@ -5,5 +5,11 @@ function assert(condition, message) {
     }
 }
 
+assert.strictEqual = function(actual, expected, message) {
+    if (actual !== expected) {
+        throw new Error(message || `Expected ${expected}, but got ${actual}`);
+    }
+};
+
 // Make it globally accessible
 window.assert = assert;

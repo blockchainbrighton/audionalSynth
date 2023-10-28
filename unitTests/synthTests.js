@@ -7,7 +7,7 @@ function testAudioChannelCreation() {
 
 function testAudioChannelPlayback() {
     const audioChannel = new AudioChannel(); // Replace with actual instantiation
-    audioChannel.playSound(); // Replace with actual sound parameters
+    audioChannel.playMS10TriangleBass(); // Replace with actual sound parameters
     assert.strictEqual(audioChannel.isPlaying, true, 'Audio channel should play sound');
 }
 
