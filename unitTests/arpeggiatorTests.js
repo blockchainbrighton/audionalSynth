@@ -17,7 +17,7 @@ function testArpeggiatorPatternChange() {
     arpeggiator.applyArpeggiatorSettingsToChannel('newPattern'); // Replace with actual pattern
     assert.strictEqual(arpeggiator.currentPattern, 'newPattern', 'Arpeggiator pattern should change');
 }
-
+ 
 testArpeggiatorPlay();
 testArpeggiatorStop();
 testArpeggiatorPatternChange();
