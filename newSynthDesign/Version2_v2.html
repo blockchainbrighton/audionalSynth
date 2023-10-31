@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audional Synth</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="layout-styles.css">
+    <link rel="stylesheet" href="button_switch_slider.css">
+    <link rel="stylesheet" href="oscillator-2.css">
+
 </head>
 <body>
     <div class="container">
@@ -19,39 +23,33 @@
                     <span class="mode-label slave">Slave</span>
                 </div>
             </div>
-        
             <div class="header-column">
                 <h1>Audional Synth</h1>
             </div>
-        
             <div class="header-column">
                 <div class="master-controls">
                     <label for="master-volume">Master Volume</label>
                     <input type="range" id="master-volume" min="0" max="100">
-                    
-                    <div class="tempo-switch-container">
-                        <div class="tempo-container">
-                            <label for="master-tempo">Master Tempo (BPM)</label>
-                            <input type="range" id="master-tempo" min="60" max="300" value="120">
-                            <span id="current-bpm">Current BPM</span>
-                        </div>
+                    <div class="tempo-container">
+                        <label for="master-tempo">Master Tempo (BPM)</label>
+                        <input type="range" id="master-tempo" min="60" max="300" value="120">
+                        <span id="current-bpm">Current BPM</span>
                     </div>
                 </div>
             </div>
         </header>
-        
+
         <div class="top-section">
             <div class="left-section">
                 <div class="channel-selection-container">
-                    <div class="channel-grid" id="channelButtonsContainer"></div> <!-- Channel buttons will be appended here -->
+                    <div class="channel-grid" id="channelButtonsContainer"></div>
                     <button class="control-channel-btn all-channels-btn active" data-channel="all">All Channels</button>
                     <div class="save-load-container">
                         <button id="saveSettingsBtn">Save Settings</button>
                         <button id="loadSettingsBtn">Load Settings</button>
                     </div>
                 </div>
-            </div>            
-                
+            </div>
             <div class="synth-controls">
                 <div class="channel">
                     <!-- Oscillator Control -->
@@ -101,19 +99,119 @@
                     </div>
                 </div>
             </div>
-        </div>            
-        <div class="arpeggiator-container">
-            <div class="arpeggiator-header">
-                <h2>Arpeggiator : : Off</h2>
-                <label class="switch">
-                    <input type="checkbox" id="arpToggle">
-                    <span class="slider round"></span>
-                </label>
-                <h2>On</h2>
+        </div>  
+        <div class="osc2-container">
+            <h3 class="osc2-header">Second Oscillator</h3>
+            <!-- Waveform Selection -->
+            <div class="osc2-control">
+                <label for="osc2-type" class="osc2-label">Type</label>
+                <select id="osc2-type" class="osc2-waveform-selector">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                </select>
+            </div>
+        
+            <!-- On/Off Switch -->
+            <div class="osc2-control">
+                <label for="osc2-switch" class="osc2-label">On/Off</label>
+                <div class="switch">
+                    <input type="checkbox" id="osc2-switch" class="osc2-input" checked>
+                    <span class="slider"></span>
+                </div>
+            </div>
+        
+            <!-- Knob Controls -->
+            <div class="osc2-control">
+                <label class="osc2-label">Volume</label>
+                <div class="knob knob1" id="osc2-volume"></div>
+                <span class="label label1">Volume</span>
+            </div>
+        
+            <div class="osc2-control">
+                <label class="osc2-label">Octave</label>
+                <div class="knob knob2" id="osc2-octave"></div>
+                <span class="label label2">Octave</span>
+            </div>
+        
+            <div class="osc2-control">
+                <label class="osc2-label">FM Depth</label>
+                <div class="knob knob3" id="osc2-fm"></div>
+                <span class="label label3">FM Depth</span>
+            </div>
+        
+            <div class="osc2-control">
+                <label class="osc2-label">PWM Depth</label>
+                <div class="knob knob4" id="osc2-pwm"></div>
+                <span class="label label4">PWM Depth</span>
+            </div>
+        
+            <div class="osc2-control">
+                <label class="osc2-label">Stereo Spread</label>
+                <div class="knob knob5" id="osc2-stereo"></div>
+                <span class="label label5">Stereo Spread</span>
+            </div>
+        
+            <!-- Power Switch -->
+            <div class="power-switch"></div>
+        </div>
+        
+        
+        <div class="lfo-controls">
+            <h3>LFO</h3>
+        
+            <!-- On/Off Switch -->
+            <div class="control">
+                <label for="lfo-switch">On/Off</label>
+                <input type="checkbox" id="lfo-switch" checked>
+            </div>
+        
+            <!-- Rate Control -->
+            <div class="control">
+                <label for="lfo-rate">Rate</label>
+                <input type="range" id="lfo-rate" min="0" max="100" value="50">
+            </div>
+        
+            <!-- Intensity Control -->
+            <div class="control">
+                <label for="lfo-intensity">Intensity</label>
+                <input type="range" id="lfo-intensity" min="0" max="100" value="50">
+            </div>
+        
+            <!-- Waveform Selection -->
+            <div class="control">
+                <label for="lfo-waveform">Waveform</label>
+                <select id="lfo-waveform">
+                    <option value="sine">Sine</option>
+                    <option value="square">Square</option>
+                    <option value="sawtooth">Sawtooth</option>
+                    <option value="triangle">Triangle</option>
+                </select>
+            </div>
+        
+            <!-- Target Control -->
+            <div class="control">
+                <label for="lfo-target">Target</label>
+                <select id="lfo-target">
+                    <option value="pitch">Pitch</option>
+                    <option value="filter">Filter</option>
+                    <option value="amplitude">Amplitude</option>
+                </select>
             </div>
         </div>
-
-            <div class="arp-controls">
+            
+     
+                  
+            <div class="arpeggiator-container">
+                <div class="arpeggiator-header">
+                    <h2>Arpeggiator : : Off</h2>
+                    <label class="switch">
+                        <input type="checkbox" id="arpToggle">
+                        <span class="slider round"></span>
+                    </label>
+                    <h2>On</h2>
+                </div>
+                <div class="arp-controls">
                 <div class="control">
                     <label for="arpPattern">Pattern</label>
                     <select id="arpPattern">
@@ -148,43 +246,31 @@
                         <option value="16">16 Bars</option>
                     </select>
                 </div>
-                
                 <div class="control arp-note-control">
                     <button onclick="recordArpNotes()">Record</button>
                     <button onclick="addArpNote()">Add Note</button>
                     <label for="noteSelection">Note:</label>
                     <select id="noteSelection">
-                        <option value="C">C</option>
-                        <option value="C#">C#</option>
-                        <option value="D">D</option>
-                        <option value="D#">D#</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="F#">F#</option>
-                        <option value="G">G</option>
-                        <option value="G#">G#</option>
-                        <option value="A">A</option>
-                        <option value="A#">A#</option>
-                        <option value="B">B</option>
                     </select>
                 </div>
             </div>
             <div class="arp-display">
                 <h3>Arp Steps</h3>
-                <div id="recordedNotesDisplay" class="step-container">
-                    <!-- Steps will be generated dynamically based on arpLength -->
-                </div>
+                <div id="recordedNotesDisplay" class="step-container"></div>
             </div>
-        </div>   
         </div>
     </div>
-    <script src="synthSettingsMaster.js"></script> <!-- External JavaScript -->
-
-    <script src="initialiseNoteArray.js"></script> <!-- jQuery -->
-    <script src="generateSteps.js"></script> <!-- External JavaScript -->
-    <script src="updateUI.js"></script> <!-- External JavaScript -->
-    <script src="arrayManagement.js"></script> <!-- External JavaScript -->
-    <script src="saveLoadSynthSettings.js"></script> <!-- External JavaScript -->
-    <script src="listeners.js"></script> <!-- External JavaScript -->
+    <script src="synthSettingsMaster.js"></script>
+    <script src="initialiseNoteArray.js"></script>
+    <script src="generateSteps.js"></script>
+    <script src="updateUI.js"></script>
+    <script src="arrayManagement.js"></script>
+    <script src="saveLoadSynthSettings.js"></script>
+    <script src="listeners.js"></script>
 </body>
 </html>
+
+
+
+
+

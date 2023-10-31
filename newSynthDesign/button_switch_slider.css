@@ -1,0 +1,208 @@
+.control, .control-channel-btn, .control input, .control select {
+    background: #444;
+    color: #fff;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure padding and borders are included in the total width and height */
+}
+
+.control-channel-btn {
+    border: none;
+    color: #fff;
+    padding: 10px 10px; /* 1/3 the original padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size:10px; /* 1/3 the original font size */
+    margin: 2px 2px; /* 1/3 the original margin */
+    cursor: pointer;
+    box-shadow: 0 1.67px #999; /* 1/3 the original box shadow */
+    transition: 0.3s;
+    flex-shrink: 0; /* Prevent button from shrinking */
+}
+
+.control-channel-btn:hover { background-color: #555; }
+
+.control-channel-btn:active {
+    background-color: #555;
+    box-shadow: 0 0.67px #666; /* 1/3 the original box shadow when active */
+    transform: translateY(1.33px); /* 1/3 the original translateY */
+}
+
+.all-channels-btn {
+    grid-column: span 4;
+}
+
+/* Switch Styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 11.33px;
+    flex-shrink: 0;
+}
+
+.switch input { 
+    display: none; 
+}
+
+.switch .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 10px;
+}
+
+.switch .slider:before {
+    position: absolute;
+    content: "";
+    height: 8.67px;
+    width: 8.67px;
+    left: 1.33px;
+    bottom: 1.33px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(8.67px);
+}
+
+/* Slider Styles */
+.slider-wrapper {
+    width: 100%;
+    padding: 3.33px 0;
+}
+
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 3.33px;
+    border-radius: 2.67px;
+    background: #ddd;
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    flex-shrink: 0;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb, .slider::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 6.67px;
+    height: 6.67px;
+    border-radius: 50%;
+    background: #444;
+    cursor: pointer;
+}
+
+
+/* Color changes for labels based on switch state */
+input:not(:checked) ~ .master-slave-switch .master {
+    color: red;
+}
+
+input:checked ~ .master-slave-switch .slave {
+    color: rgb(66, 66, 244);
+}
+
+
+/* Knob Styles */
+.knob {
+    position: relative;
+    width: 20px; /* Diameter of the knob */
+    height: 20px; /* Diameter of the knob */
+    border-radius: 50%; /* Make it circular */
+    background: #666; /* Dark background for the knob */
+    box-shadow: inset 0 0 5px #333; /* Inner shadow for depth */
+    cursor: pointer; /* Cursor indicates it's interactive */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.knob::before {
+    content: '';
+    position: absolute;
+    width: 3px; /* Width of the indicator line */
+    height: 10px; /* Height of the indicator line */
+    background: #fff; /* Color of the indicator line */
+    border-radius: 1px; /* Slightly rounded edges on the line */
+    transform: rotate(0deg); /* Initial rotation - can be adjusted with JavaScript based on value */
+}
+
+.osc2-control {
+    width: 90vw;
+    height: 20vh;
+    background-color: #333;
+    border-radius: 10px;
+    padding: 1vw;
+    position: relative;
+    box-shadow: 0 0 10px #000;
+}
+
+.knob {
+    background-color: #555;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.power-switch {
+    width: 2.5vw;
+    height: 5vw;
+    background-color: #f00;
+    border-radius: 1vw;
+    position: absolute;
+    top: 1vw;
+    left: 1vw;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.label {
+    position: absolute;
+    color: #fff;
+    text-align: center;
+    font-size: 1vw;
+}
+
+/* Positioning the knobs in a staggered grid pattern with varying sizes */
+.knob1 { top: 2vh; left: 8vw; width: 4vw; height: 4vw; }
+.knob2 { top: 10vh; left: 14vw; width: 5vw; height: 5vw; }
+.knob3 { top: 2vh; left: 20vw; width: 4vw; height: 4vw; }
+.knob4 { top: 10vh; left: 26vw; width: 3vw; height: 3vw; }
+.knob5 { top: 2vh; left: 32vw; width: 5vw; height: 5vw; }
+.knob6 { top: 10vh; left: 38vw; width: 4vw; height: 4vw; }
+.knob7 { top: 2vh; left: 44vw; width: 4vw; height: 4vw; }
+.knob8 { top: 10vh; left: 50vw; width: 3vw; height: 3vw; }
+.knob9 { top: 2vh; left: 56vw; width: 5vw; height: 5vw; }
+.knob10 { top: 10vh; left: 62vw; width: 4vw; height: 4vw; }
+.knob11 { top: 2vh; left: 68vw; width: 4vw; height: 4vw; }
+.knob12 { top: 10vh; left: 74vw; width: 3vw; height: 3vw; }
+
+/* Labels */
+.label1 { top: 6vh; left: 8vw; }
+.label2 { top: 14vh; left: 14vw; }
+.label3 { top: 6vh; left: 20vw; }
+.label4 { top: 14vh; left: 26vw; }
+.label5 { top: 6vh; left: 32vw; }
+.label6 { top: 14vh; left: 38vw; }
+.label7 { top: 6vh; left: 44vw; }
+.label8 { top: 14vh; left: 50vw; }
+.label9 { top: 6vh; left: 56vw; }
+.label10 { top: 14vh; left: 62vw; }
+.label11 { top: 6vh; left: 68vw; }
+.label12 { top: 14vh; left: 74vw; }
