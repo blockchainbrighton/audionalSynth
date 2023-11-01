@@ -1,6 +1,7 @@
 <script>
     export let audioContext;
     export let gainNode;
+    export let midiNoteToFrequency; // Export the midiNoteToFrequency prop
 
     let oscillator;
     let waveform = 'sine';

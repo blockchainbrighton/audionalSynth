@@ -2,6 +2,7 @@
     import Piano from './Piano.svelte';
     import MidiController from './MidiController.svelte';
     import Oscillator from './Oscillator.svelte'; // Import Oscillator
+    import { midiNoteToFrequency } from './utils.js'; // Import the function
 
     // Create an audio context
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -14,7 +15,7 @@
     <h1>Audional Synth - Basic 88 note Keyboard</h1>
     <Piano />
     <MidiController />
-    <Oscillator {audioContext} {gainNode} /> <!-- Include Oscillator component -->
+    <Oscillator {audioContext} {gainNode} {midiNoteToFrequency} /> <!-- Include Oscillator component and pass the function as a prop -->
 </main>
 
 <style>
