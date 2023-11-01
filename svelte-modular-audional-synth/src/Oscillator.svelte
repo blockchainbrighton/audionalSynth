@@ -1,8 +1,8 @@
 <!-- Oscillator.svelte -->
 
 <script>
-    import { createOscillator } from './oscillatorFunctions.js';
-    import { midiNoteToFrequency } from './midiNotesToFrequencied.js'; // Import the conversion function
+    import { createOscillator, handlePlayNote, handleStopNote } from './oscillatorFunctions.js';
+    import { midiNoteToFrequency } from './midiNotesToFrequencies.js'; // Import the conversion function
 
     export let audioContext;
     export let gainNode;
@@ -13,35 +13,16 @@
     let decay = 0.1;
     let sustain = 0.7;
     let release = 0.5;
-    let oscillatorInstance;
 
-    export function handlePlayNote(note, velocity) {
-        console.log(`handlePlayNote: Received note: ${note}, velocity: ${velocity}`);
-        const frequency = midiNoteToFrequency(note); // Convert MIDI note to frequency
-        console.log(`handlePlayNote: Converted frequency: ${frequency} Hz`);
-        oscillatorInstance = createOscillator(audioContext, gainNode, { waveform, attack, decay, sustain, release });
-        console.log(`handlePlayNote: Oscillator instance created`);
-        oscillatorInstance.play(frequency, velocity); // Use frequency instead of MIDI note
-        console.log(`handlePlayNote: Playing note with frequency: ${frequency} Hz and velocity: ${velocity}`);
-    }
-
-
-    export function handleStopNote(note) {
-        if (oscillatorInstance) {
-            oscillatorInstance.stop();
-        }
-    }
-
-     // Here, we are using the midiData to trigger the oscillator
-     $: if (midiData) {
+    // Here, we are using the midiData to trigger the oscillator
+    $: if (midiData) {
         console.log('Oscillator: midiData is truthy, handling MIDI data...');
         if (midiData.type === 'noteOn') {
-            handlePlayNote(midiData.note, midiData.velocity);
+            handlePlayNote(audioContext, gainNode, midiData.note, midiData.velocity, { waveform, attack, decay, sustain, release }, midiNoteToFrequency);
         } else if (midiData.type === 'noteOff') {
-            handleStopNote(midiData.note);
+            handleStopNote();
         }
     }
-
 </script>
 
 <div class="oscillator-controls">
