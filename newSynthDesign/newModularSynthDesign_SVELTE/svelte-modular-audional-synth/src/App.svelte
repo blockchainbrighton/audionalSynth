@@ -1,10 +1,12 @@
 <script>
     import Piano from './Piano.svelte';
+    import MidiController from './MidiController.svelte'; // Import MidiController
 </script>
 
 <main>
     <h1>Audional Synth - Basic 88 note Keyboard</h1>
     <Piano />
+    <MidiController /> <!-- Include MidiController component -->
 </main>
 
 <style>
