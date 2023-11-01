@@ -1,12 +1,16 @@
 <script>
+
     import { pianoKeys, midiMessage } from './pianoStore.js';
     import { get } from 'svelte/store';
-    import { playNote, stopNote } from './Oscillator.svelte';
+    import { playNote, stopNote } from './oscillatorFunctions.js';
 
     export let audioContext;
     export let gainNode;
     export let midiNoteToFrequency;
+    
+    console.log('audioContext:', audioContext);
 
+   
     let keyNumber = 1;
     
     let createKeys = () => {
@@ -27,16 +31,12 @@
     pianoKeys.set(createKeys());
     
     function lightUpKey(keyIndex) {
-        pianoKeys.update(keys => keys.map((key, index) => 
-            index === keyIndex ? {...key, lit: true} : key
-        ));
+        // Function implementation
         playNote(get(pianoKeys)[keyIndex].midiNote, 100, audioContext, gainNode, midiNoteToFrequency);
     }
 
     function lightOffKey(keyIndex) {
-        pianoKeys.update(keys => keys.map((key, index) => 
-            index === keyIndex ? {...key, lit: false} : key
-        ));
+        // Function implementation
         stopNote(get(pianoKeys)[keyIndex].midiNote, audioContext, gainNode);
     }
 

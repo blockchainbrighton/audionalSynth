@@ -1,7 +1,5 @@
 <script>
-    export let audioContext;
-    export let gainNode;
-    export let midiNoteToFrequency;
+
 
     let oscillator;
     let waveform = 'sine';
@@ -30,6 +28,7 @@
             oscillator.disconnect();
         }
     }
+
 </script>
 
 <div class="oscillator-controls">
