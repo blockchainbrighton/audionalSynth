@@ -1,13 +1,13 @@
 <script>
-    import { pianoKeys } from './pianoStore.js';
-    import { midiMessage } from './pianoStore.js';
+    import { pianoKeys, midiMessage, noteAction, createAudioContext } from './pianoStore.js';
+
+    let audioContext; // Define the audioContext variable
 
     let keyNumber = 1;
     
     let createKeys = () => {
         let keys = [];
         for (let i = 0; i < 52; i++) {
-            // Adjust the offset here by subtracting 9 to align with standard MIDI note numbers
             keys.push({ type: 'white', number: keyNumber, midiNote: keyNumber + 20 - 9, left: i * 23, lit: false });
             
             if (i % 7 !== 2 && i % 7 !== 6) {
@@ -20,22 +20,34 @@
         return keys;
     };
 
-    // Initialize the store with the keys
     pianoKeys.set(createKeys());
     
+    async function openAudioContext() {
+        if (!audioContext) {
+            audioContext = createAudioContext();
+        }
+        if (audioContext.state === 'suspended') {
+            await audioContext.resume();
+        }
+    }
+
     function lightUpKey(keyIndex) {
+        openAudioContext(); // Open audio context on key click
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: true} : key
         ));
+        // Trigger note on action
+        noteAction.set({ action: 'play', note: $pianoKeys[keyIndex].midiNote });
     }
 
     function lightOffKey(keyIndex) {
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: false} : key
         ));
+        // Trigger note off action
+        noteAction.set({ action: 'stop', note: $pianoKeys[keyIndex].midiNote });
     }
 
-    // Subscribe to MIDI messages
     $: {
         if ($midiMessage) {
             if ($midiMessage.type === 'noteOn') {
