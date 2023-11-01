@@ -1,7 +1,9 @@
 // midiNotesToFrequencies.js
 
 export function midiNoteToFrequency(note) {
-    return 440 * Math.pow(2, (note - 69) / 12);
+    const frequency = 440 * Math.pow(2, (note - 69) / 12);
+    console.log(`midiNoteToFrequency: Converting MIDI note ${note} to frequency ${frequency} Hz`);
+    return frequency;
 }
 
 // Mapping of note names to MIDI note numbers
@@ -18,13 +20,16 @@ const noteNameToMidiNumber = {
 
 // Function to convert MIDI note number to frequency
 function midiNoteNumberToFrequency(noteNumber) {
-    return 440 * Math.pow(2, (noteNumber - 69) / 12);
+    const frequency = 440 * Math.pow(2, (noteNumber - 69) / 12);
+    console.log(`midiNoteNumberToFrequency: Converting MIDI note number ${noteNumber} to frequency ${frequency} Hz`);
+    return frequency;
 }
 
 // Function to convert note name to frequency
 export function noteNameToFrequency(noteName) {
     const noteNumber = noteNameToMidiNumber[noteName.toUpperCase()];
     if (noteNumber !== undefined) {
+        console.log(`noteNameToFrequency: Converting note name ${noteName} to MIDI note number ${noteNumber}`);
         return midiNoteNumberToFrequency(noteNumber);
     } else {
         throw new Error(`Invalid note name: ${noteName}`);

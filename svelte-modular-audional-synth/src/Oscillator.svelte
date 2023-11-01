@@ -1,29 +1,36 @@
 <!-- Oscillator.svelte -->
 
 <script>
-    import { createOscillator, handlePlayNote, handleStopNote } from './oscillatorFunctions.js';
-    import { midiNoteToFrequency } from './midiNotesToFrequencies.js'; // Import the conversion function
+    import { midiData } from './midiStore.js';
+    import { handlePlayNote, handleStopNote } from './oscillatorFunctions.js';
+    import { midiNoteToFrequency } from './midiHelpers.js';
 
     export let audioContext;
     export let gainNode;
-    export let midiData;
+    export let midiMessage;
 
-    let waveform = 'sine';
-    let attack = 0.1;
-    let decay = 0.1;
-    let sustain = 0.7;
-    let release = 0.5;
+    let waveform = 'sine'; // Default waveform
+    let attack = 0.1; // Attack time in seconds
+    let decay = 0.1; // Decay time in seconds
+    let sustain = 0.8; // Sustain level (0 to 1)
+    let release = 0.1; // Release time in seconds
 
     // Here, we are using the midiData to trigger the oscillator
-    $: if (midiData) {
-        console.log('Oscillator: midiData is truthy, handling MIDI data...');
-        if (midiData.type === 'noteOn') {
-            handlePlayNote(audioContext, gainNode, midiData.note, midiData.velocity, { waveform, attack, decay, sustain, release }, midiNoteToFrequency);
-        } else if (midiData.type === 'noteOff') {
-            handleStopNote();
+    $: if (midiMessage) {
+        console.log(`Oscillator: midiMessage is truthy, handling MIDI data: ${JSON.stringify(midiMessage)}`);
+        if (midiMessage.type === 'noteOn') {
+            console.log(`Oscillator: Handling noteOn event for note: ${midiMessage.note} with velocity: ${midiMessage.velocity}`);
+            handlePlayNote(audioContext, gainNode, midiMessage.note, midiMessage.velocity, { waveform, attack, decay, sustain, release }, midiNoteToFrequency);
+        } else if (midiMessage.type === 'noteOff') {
+            console.log(`Oscillator: Handling noteOff event for note: ${midiMessage.note}`);
+            handleStopNote(midiMessage.note);
+        } else {
+            console.log(`Oscillator: Unhandled MIDI message type: ${midiMessage.type}`);
         }
     }
 </script>
+
+
 
 <div class="oscillator-controls">
     <label>
