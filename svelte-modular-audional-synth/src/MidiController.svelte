@@ -11,6 +11,7 @@
         try {
             midiAccess = await navigator.requestMIDIAccess();
             midiAccess.inputs.forEach(input => midiInputs.push(input));
+            console.log('MidiController: MIDI inputs', midiInputs);
             midiInputs.forEach(input => input.onmidimessage = handleMIDIMessage);
         } catch (error) {
             console.error('MIDI access error:', error);
@@ -26,6 +27,6 @@
         midiData.set(midiMessage);
 
         // After setting the midiData store
-        console.log('MidiController: midiData store set to', $midiData);
+        console.log('MidiController: midiData store set to', midiMessage);
     }
 </script>

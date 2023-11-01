@@ -2,7 +2,7 @@
 
 <script>
     import { createOscillator } from './oscillatorFunctions.js';
-    import { midiNoteToFrequency } from './utils.js'; // Import the conversion function
+    import { midiNoteToFrequency } from './midiNotesToFrequencied.js'; // Import the conversion function
 
     export let audioContext;
     export let gainNode;
@@ -15,16 +15,6 @@
     let release = 0.5;
     let oscillatorInstance;
 
-    // Here, we are using the midiData to trigger the oscillator
-    $: if (midiData) {
-        console.log('Oscillator: midiData is truthy, handling MIDI data...');
-        if (midiData.type === 'noteOn') {
-            handlePlayNote(midiData.note, midiData.velocity);
-        } else if (midiData.type === 'noteOff') {
-            handleStopNote(midiData.note);
-        }
-    }
-
     export function handlePlayNote(note, velocity) {
         const frequency = midiNoteToFrequency(note); // Convert MIDI note to frequency
         oscillatorInstance = createOscillator(audioContext, gainNode, { waveform, attack, decay, sustain, release });
@@ -36,6 +26,17 @@
             oscillatorInstance.stop();
         }
     }
+
+     // Here, we are using the midiData to trigger the oscillator
+     $: if (midiData) {
+        console.log('Oscillator: midiData is truthy, handling MIDI data...');
+        if (midiData.type === 'noteOn') {
+            handlePlayNote(midiData.note, midiData.velocity);
+        } else if (midiData.type === 'noteOff') {
+            handleStopNote(midiData.note);
+        }
+    }
+
 </script>
 
 <div class="oscillator-controls">

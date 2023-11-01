@@ -1,15 +1,16 @@
 <!-- Piano.svelte -->
 
 <script>
-    import { pianoKeys, midiMessage } from './pianoStore.js';
+    import { pianoKeys } from './pianoStore.js';
     import { midiNoteOn, midiNoteOff } from './midiHelpers.js';
+    import { midiData } from './midiStore.js'; // Import the midiData store
 
-    let keyNumber = 1;
+    let keyNumber = 24;
 
     function createKeys() {
         let keys = [];
         for (let i = 0; i < 52; i++) {
-            let midiNote = keyNumber + 23;
+            let midiNote = keyNumber + 12; // Start from MIDI note 12 (C0)
             keys.push({ type: 'white', number: keyNumber, midiNote: midiNote, left: i * 23, lit: false });
 
             if (i % 7 !== 2 && i % 7 !== 6) {
@@ -22,41 +23,53 @@
         return keys;
     };
 
-    pianoKeys.set(createKeys());
+    const createdKeys = createKeys();
+    console.log('Piano: Created keys', createdKeys);
+    pianoKeys.set(createdKeys);
 
-   // Function to light up a key
-   function lightUpKey(keyIndex) {
+    // Function to light up a key
+    function lightUpKey(keyIndex, velocity) {
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: true} : key
         ));
-        console.log('Piano: Key lit up at index', keyIndex);
+        console.log('Piano: Key lit up at index', keyIndex, 'with velocity', velocity);
     }
 
     // Function to turn off the light on a key
     function lightOffKey(keyIndex) {
         pianoKeys.update(keys => {
-            // Check if the key at the given index is already lit
             if (keys[keyIndex].lit) {
                 console.log('Piano: Key turned off at index', keyIndex);
                 return keys.map((key, index) => 
                     index === keyIndex ? {...key, lit: false} : key
                 );
             }
-            // If the key is not lit, no need to update or log
             return keys;
         });
     }
 
     $: {
-        if ($midiMessage) {
-            if ($midiMessage.type === 'noteOn') {
-                midiNoteOn($midiMessage.note, lightUpKey);
-            } else if ($midiMessage.type === 'noteOff') {
-                midiNoteOff($midiMessage.note, lightOffKey);
-            }
+    console.log('Piano: Store update', $midiData);
+    if ($midiData) {
+        console.log('Piano: Received MIDI Message', $midiData);
+        console.log('Piano: MIDI Message Type', $midiData.type); // Log the MIDI message type
+
+        // Determine if the message is 'Note On' or 'Note Off'
+        const isNoteOn = $midiData.type >= 144 && $midiData.type <= 159 && $midiData.velocity > 0;
+        const isNoteOff = ($midiData.type >= 128 && $midiData.type <= 143) || ($midiData.type >= 144 && $midiData.type <= 159 && $midiData.velocity === 0);
+
+        if (isNoteOn) {
+            console.log('Piano: Handling MIDI Note On');
+            midiNoteOn($midiData.note, $midiData.velocity, lightUpKey);
+        }
+        else if (isNoteOff) {
+            console.log('Piano: Handling MIDI Note Off'); // Log for 'Note Off'
+            midiNoteOff($midiData.note, lightOffKey);
         }
     }
+}
 </script>
+
 
 
 <style>

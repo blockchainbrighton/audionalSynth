@@ -10,6 +10,7 @@ function getKeys() {
     pianoKeys.subscribe($keys => {
         keys = $keys;
     })();
+    console.log('midiHelpers: Retrieved keys', keys);
     return keys;
 }
 
@@ -21,6 +22,7 @@ export function midiNoteOn(midiNote, velocity, lightUpKey) {
             keyIndex = index;
         }
     });
+    console.log(`midiHelpers: MIDI Note On: MIDI Note = ${midiNote}, Key Index = ${keyIndex}, Velocity = ${velocity}`);
     if (keyIndex !== undefined) lightUpKey(keyIndex, velocity);
 }
 
@@ -32,6 +34,7 @@ export function midiNoteOff(midiNote, lightOffKey) {
             keyIndex = index;
         }
     });
+    console.log(`midiHelpers: MIDI Note Off: MIDI Note = ${midiNote}, Key Index = ${keyIndex}`);
     if (keyIndex !== undefined) lightOffKey(keyIndex);
 }
 
@@ -39,7 +42,7 @@ export function midiNoteOff(midiNote, lightOffKey) {
 export function midiControlChange(controlNumber, value) {
     // Handle MIDI control change messages here
     // For example, you can adjust volume, modulation, or other parameters based on controlNumber and value
-    console.log(`Control Change: Control Number = ${controlNumber}, Value = ${value}`);
+    console.log(`midiHelpers: Control Change: Control Number = ${controlNumber}, Value = ${value}`);
 }
 
 
