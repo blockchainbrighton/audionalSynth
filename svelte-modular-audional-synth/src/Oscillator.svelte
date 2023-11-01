@@ -16,10 +16,15 @@
     let oscillatorInstance;
 
     export function handlePlayNote(note, velocity) {
+        console.log(`handlePlayNote: Received note: ${note}, velocity: ${velocity}`);
         const frequency = midiNoteToFrequency(note); // Convert MIDI note to frequency
+        console.log(`handlePlayNote: Converted frequency: ${frequency} Hz`);
         oscillatorInstance = createOscillator(audioContext, gainNode, { waveform, attack, decay, sustain, release });
+        console.log(`handlePlayNote: Oscillator instance created`);
         oscillatorInstance.play(frequency, velocity); // Use frequency instead of MIDI note
+        console.log(`handlePlayNote: Playing note with frequency: ${frequency} Hz and velocity: ${velocity}`);
     }
+
 
     export function handleStopNote(note) {
         if (oscillatorInstance) {
