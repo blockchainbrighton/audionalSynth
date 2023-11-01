@@ -24,16 +24,27 @@
 
     pianoKeys.set(createKeys());
 
-    function lightUpKey(keyIndex) {
+   // Function to light up a key
+   function lightUpKey(keyIndex) {
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: true} : key
         ));
+        console.log('Piano: Key lit up at index', keyIndex);
     }
 
+    // Function to turn off the light on a key
     function lightOffKey(keyIndex) {
-        pianoKeys.update(keys => keys.map((key, index) => 
-            index === keyIndex ? {...key, lit: false} : key
-        ));
+        pianoKeys.update(keys => {
+            // Check if the key at the given index is already lit
+            if (keys[keyIndex].lit) {
+                console.log('Piano: Key turned off at index', keyIndex);
+                return keys.map((key, index) => 
+                    index === keyIndex ? {...key, lit: false} : key
+                );
+            }
+            // If the key is not lit, no need to update or log
+            return keys;
+        });
     }
 
     $: {
