@@ -1,75 +1,58 @@
+<!-- Piano.svelte -->
+
 <script>
-
     import { pianoKeys, midiMessage } from './pianoStore.js';
-    import { get } from 'svelte/store';
-    import { playNote, stopNote } from './oscillatorFunctions.js';
+    import { midiNoteOn, midiNoteOff } from './midiHelpers.js'; // Import only midiNoteOn and midiNoteOff
 
-    export let audioContext;
-    export let gainNode;
-    export let midiNoteToFrequency;
-    
-    console.log('audioContext:', audioContext);
-
-   
     let keyNumber = 1;
-    
-    let createKeys = () => {
-        let keys = [];
-        for (let i = 0; i < 52; i++) {
-            keys.push({ type: 'white', number: keyNumber, midiNote: keyNumber + 20 - 9, left: i * 23, lit: false });
-            
-            if (i % 7 !== 2 && i % 7 !== 6) {
-                keys.push({ type: 'black', number: keyNumber + 1, midiNote: keyNumber + 21 - 9, left: 15 + i * 23, lit: false });
-                keyNumber += 2;
-            } else {
-                keyNumber += 1;
-            }
-        }
-        return keys;
-    };
 
-    pianoKeys.set(createKeys());
-    
+    function createKeys() {
+    let keys = [];
+    for (let i = 0; i < 52; i++) {
+        // Adjust the offset to correctly map MIDI note numbers
+        // Middle C (C4) should correspond to MIDI note 60
+        // Subtracting 8 from the previous adjustment to align C4 with MIDI note 60
+        let midiNote = keyNumber + 23;
+
+        keys.push({ type: 'white', number: keyNumber, midiNote: midiNote, left: i * 23, lit: false });
+
+        if (i % 7 !== 2 && i % 7 !== 6) {
+            keys.push({ type: 'black', number: keyNumber + 1, midiNote: midiNote + 1, left: 15 + i * 23, lit: false });
+            keyNumber += 2;
+        } else {
+            keyNumber += 1;
+        }
+    }
+    return keys;
+};
+
+pianoKeys.set(createKeys());
+
+
+
     function lightUpKey(keyIndex) {
-        // Function implementation
-        playNote(get(pianoKeys)[keyIndex].midiNote, 100, audioContext, gainNode, midiNoteToFrequency);
+        pianoKeys.update(keys => keys.map((key, index) => 
+            index === keyIndex ? {...key, lit: true} : key
+        ));
     }
 
     function lightOffKey(keyIndex) {
-        // Function implementation
-        stopNote(get(pianoKeys)[keyIndex].midiNote, audioContext, gainNode);
+        pianoKeys.update(keys => keys.map((key, index) => 
+            index === keyIndex ? {...key, lit: false} : key
+        ));
     }
 
     $: {
         if ($midiMessage) {
             if ($midiMessage.type === 'noteOn') {
-                midiNoteOn($midiMessage.note);
+                midiNoteOn($midiMessage.note, lightUpKey);
             } else if ($midiMessage.type === 'noteOff') {
-                midiNoteOff($midiMessage.note);
+                midiNoteOff($midiMessage.note, lightOffKey);
             }
         }
     }
-
-    function midiNoteOn(midiNote) {
-        let keyIndex;
-        $pianoKeys.forEach((key, index) => {
-            if (key.midiNote === midiNote) {
-                keyIndex = index;
-            }
-        });
-        if (keyIndex !== undefined) lightUpKey(keyIndex);
-    }
-
-    function midiNoteOff(midiNote) {
-        let keyIndex;
-        $pianoKeys.forEach((key, index) => {
-            if (key.midiNote === midiNote) {
-                keyIndex = index;
-            }
-        });
-        if (keyIndex !== undefined) lightOffKey(keyIndex);
-    }
 </script>
+
 
 
 <style>
@@ -145,3 +128,8 @@
     </div>
     <div class="end-block"></div>
 </div>
+
+
+
+
+
