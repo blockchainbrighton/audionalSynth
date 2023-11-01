@@ -1,12 +1,20 @@
 <script>
     import Piano from './Piano.svelte';
-    import MidiController from './MidiController.svelte'; // Import MidiController
+    import MidiController from './MidiController.svelte';
+    import Oscillator from './Oscillator.svelte'; // Import Oscillator
+
+    // Create an audio context
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create a gain node
+    const gainNode = audioContext.createGain();
 </script>
 
 <main>
     <h1>Audional Synth - Basic 88 note Keyboard</h1>
     <Piano />
-    <MidiController /> <!-- Include MidiController component -->
+    <MidiController />
+    <Oscillator {audioContext} {gainNode} /> <!-- Include Oscillator component -->
 </main>
 
 <style>
