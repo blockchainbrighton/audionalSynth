@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Keyboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .piano {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border: 5px solid black;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #333;
+        }
+        .keyboard {
+            position: relative;
+            width: 1196px; /* 52 white keys * 23px each */
+            height: 150px; /* Adjusted for better realism */
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 5px;
+            display: flex;
+        }
+        .white-key, .black-key {
+            cursor: pointer; /* Change cursor to pointer when hovering over keys */
+        }
+        .white-key {
+            width: 23px; /* Realistic width */
+            height: 100%;
+            border-right: 1px solid black;
+            background-color: white;
+            display: inline-block;
+        }
+        .black-key {
+            width: 14px; /* Realistic width */
+            height: 60%; /* 60% of white key height */
+            position: absolute;
+            background-color: black;
+            z-index: 1;
+        }
+        .end-block {
+            width: 20px;
+            height: 150px; /* Same as keyboard height */
+            background-color: #333;
+            border-radius: 5px;
+        }
+        .key-active {
+            background-color: yellow; /* Visual indication for an active key */
+        }
+    </style>
+</head>
+<body>
+    <div class="piano">
+        <div class="end-block"></div>
+        <div class="keyboard" id="keyboard"></div>
+        <div class="end-block"></div>
+    </div>
+
+    <script>
+        const keyboard = document.getElementById('keyboard');
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+        function playNote(frequency, keyNumber, noteName) {
+            console.log(`Key Number: ${keyNumber}, Note: ${noteName}, Frequency: ${frequency.toFixed(2)} Hz`);
+            const oscillator = audioContext.createOscillator();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+            oscillator.connect(audioContext.destination);
+            oscillator.start();
+            return oscillator;
+        }
+    
+        function getFrequencyForKey(keyNumber) {
+            // Adjusting to start from C0 (keyNumber 1)
+            return Math.pow(2, (keyNumber - 1) / 12) * 16.35;
+        }
+    
+        function getNoteName(keyNumber) {
+            const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            const octave = Math.floor((keyNumber - 1) / 12);
+            return notes[(keyNumber - 1) % 12] + octave;
+        }
+    
+        function createAndPositionBlackKey(leftPosition, keyNumber) {
+            const blackKey = document.createElement('div');
+            blackKey.classList.add('black-key');
+            blackKey.style.left = leftPosition + 'px';
+            blackKey.addEventListener('mousedown', () => {
+                blackKey.classList.add('key-active');
+                const frequency = getFrequencyForKey(keyNumber);
+                const noteName = getNoteName(keyNumber);
+                const oscillator = playNote(frequency, keyNumber, noteName);
+                window.addEventListener('mouseup', () => {
+                    blackKey.classList.remove('key-active');
+                    oscillator.stop();
+                }, { once: true });
+            });
+            keyboard.appendChild(blackKey);
+        }
+    
+        let blackKeyOffset = 15; // Starting position for the first black key
+        let keyNumber = 1; // Key number for the first key (C0)
+    
+        for (let i = 0; i < 52; i++) { // 52 white keys
+            const whiteKey = document.createElement('div');
+            whiteKey.classList.add('white-key');
+            whiteKey.addEventListener('mousedown', () => {
+                whiteKey.classList.add('key-active');
+                const frequency = getFrequencyForKey(keyNumber);
+                const noteName = getNoteName(keyNumber);
+                const oscillator = playNote(frequency, keyNumber, noteName);
+                window.addEventListener('mouseup', () => {
+                    whiteKey.classList.remove('key-active');
+                    oscillator.stop();
+                }, { once: true });
+            });
+            keyboard.appendChild(whiteKey);
+            keyNumber++; // Increment key number after adding a white key
+    
+            // Check for black keys except for E-F and B-C gaps
+            if (i % 7 !== 2 && i % 7 !== 6) {
+                createAndPositionBlackKey(blackKeyOffset + i * 23, keyNumber);
+                keyNumber++; // Increment key number after adding a black key
+            }
+        }
+    </script>
+    
+    
+    
+</body>
+</html>

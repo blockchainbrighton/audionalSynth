@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Keyboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+        }
+        .piano {
+            display: flex;
+            align-items: center;
+            border: 5px solid black;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: #333;
+        }
+        .keyboard {
+            position: relative;
+            width: 1196px; /* 52 white keys * 23px each */
+            height: 150px;
+            background-color: white;
+            border: 2px solid black;
+            border-radius: 5px;
+            display: flex;
+        }
+        .white-key, .black-key {
+            cursor: pointer;
+            position: relative;
+        }
+        .white-key {
+            width: 23px; /* Realistic width */
+            height: 100%;
+            border-right: 1px solid black;
+            background-color: white;
+            display: inline-block;
+            color: black;
+            font-size: 10px;
+            text-align: center;
+            line-height: 150px;
+        }
+        .black-key {
+            width: 14px; /* Realistic width */
+            height: 60%; /* 60% of white key height */
+            position: absolute;
+            top: 0;
+            background-color: black;
+            z-index: 2;
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            line-height: 90px; /* 60% of white key height */
+        }
+        .end-block {
+            width: 20px;
+            height: 150px;
+            background-color: #333;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="piano">
+        <div class="end-block"></div>
+        <div class="keyboard" id="keyboard"></div>
+        <div class="end-block"></div>
+    </div>
+
+    <script>
+        const keyboard = document.getElementById('keyboard');
+
+        function createKey(className, leftPosition = null, keyNumber = null) {
+            const key = document.createElement('div');
+            key.classList.add(className);
+            if (leftPosition !== null) {
+                key.style.left = leftPosition + 'px';
+            }
+            if (keyNumber !== null) {
+                key.textContent = keyNumber;
+            }
+            keyboard.appendChild(key);
+        }
+
+        const blackKeyOffset = 15; // Starting position for the first black key
+        let keyNumber = 1;
+
+        for (let i = 0; i < 52; i++) { // 52 white keys
+            createKey('white-key', null, keyNumber);
+
+            // Check for black keys except for E-F and B-C gaps
+            if (i % 7 !== 2 && i % 7 !== 6) {
+                createKey('black-key', blackKeyOffset + i * 23, keyNumber + 1);
+                keyNumber += 2;
+            } else {
+                keyNumber += 1;
+            }
+        }
+    </script>
+</body>
+</html>

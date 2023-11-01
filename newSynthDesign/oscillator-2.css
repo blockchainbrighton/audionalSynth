@@ -1,69 +1,59 @@
 /* Base Styles for Oscillator 2 Module */
 .osc2-container {
     background: #333;
-    padding: 10px;
+    padding: 5px; /* Minimal padding */
     border-radius: 8px;
     box-sizing: border-box; /* Include padding and border in width and height */
-    font-size: 10px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns layout */
-    gap: 10px; /* Space between grid items */
+    font-size: 8px; /* Small font size */
+    display: flex; /* Use flexbox for horizontal layout */
+    align-items: center; /* Align items vertically to the center */
 }
 
 .osc2-header {
     color: #fff;
-    text-align: center;
-    margin-bottom: 20px;
-    grid-column: 1 / -1; /* Span across all columns */
+    text-align: left; /* Align header text to the left */
+    margin-right: 10px; /* Space after the header */
+    flex-shrink: 0; /* Prevent header from shrinking */
 }
 
 .osc2-control {
     display: flex;
-    flex-direction: column; /* Stack label and knob vertically */
-    align-items: center; /* Center items horizontally */
+    flex-direction: column; /* Arrange label and control vertically */
+    align-items: center; /* Align items horizontally to the center */
+    margin-right: 10px; /* Space after each control */
 }
 
 .osc2-label {
     color: #fff;
-    margin-bottom: 5px; /* Space between label and knob */
+    margin-bottom: 5px; /* Space between label and control */
+    font-size: 15px; /* Font size for labels */
 }
 
-.osc2-input {
-    width: 100%;
-    background: #444;
-    color: #fff;
-    border: none;
-    padding: 5px;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-/* Specific styles for the waveform selector */
 .osc2-waveform-selector {
-    width: 20%; /* Smaller width for the selector */
     background: #444;
     color: #fff;
     border: none;
     padding: 5px;
     border-radius: 5px;
     box-sizing: border-box;
+    width: 60px; /* Reduce width of waveform selector */
 }
 
 .osc2-knob {
     position: relative;
-    width: 10px; /* Diameter of the knob */
-    height: 10px; /* Diameter of the knob */
+    width: 30px; /* Fixed diameter of the knob */
+    height: 30px; /* Fixed diameter of the knob */
     border-radius: 50%; /* Make it circular */
     background: #666; /* Dark background for the knob */
-    box-shadow: inset 0 0 5px #333; /* Inner shadow for depth */
+    box-shadow: inset 0 0 3px #333; /* Inner shadow for depth */
     cursor: pointer; /* Cursor indicates it's interactive */
 }
 
 .osc2-knob::before {
     content: '';
     position: absolute;
-    width: 3px; /* Width of the indicator line */
-    height: 15px; /* Height of the indicator line */
+    width: 2px; /* Width of the indicator line */
+    height: 10px; /* Height of the indicator line */
     background: #fff; /* Color of the indicator line */
     border-radius: 1px; /* Slightly rounded edges on the line */
     transform: rotate(0deg); /* Initial rotation - can be adjusted with JavaScript based on value */

@@ -100,60 +100,30 @@
                 </div>
             </div>
         </div>  
-        <div class="osc2-container">
+        <div class="osc2-container" style="height: 20vh;">
             <h3 class="osc2-header">Second Oscillator</h3>
+            
+            <!-- On/Off Switch -->
+            <div class="osc2-control">
+                <label for="osc2-switch" class="osc2-label">On/Off</label>
+                <input type="checkbox" id="osc2-switch" checked>
+            </div>
+        
             <!-- Waveform Selection -->
             <div class="osc2-control">
-                <label for="osc2-type" class="osc2-label">Type</label>
+                <label for="osc2-type" class="osc2-label">Waveform</label>
                 <select id="osc2-type" class="osc2-waveform-selector">
                     <option value="sine">Sine</option>
                     <option value="square">Square</option>
                     <option value="sawtooth">Sawtooth</option>
                 </select>
             </div>
-        
-            <!-- On/Off Switch -->
+            
+            <!-- Volume Control (Knob) -->
             <div class="osc2-control">
-                <label for="osc2-switch" class="osc2-label">On/Off</label>
-                <div class="switch">
-                    <input type="checkbox" id="osc2-switch" class="osc2-input" checked>
-                    <span class="slider"></span>
-                </div>
+                <label for="osc2-volume" class="osc2-label">Volume</label>
+                <div class="osc2-knob" id="osc2-volume"></div>
             </div>
-        
-            <!-- Knob Controls -->
-            <div class="osc2-control">
-                <label class="osc2-label">Volume</label>
-                <div class="knob knob1" id="osc2-volume"></div>
-                <span class="label label1">Volume</span>
-            </div>
-        
-            <div class="osc2-control">
-                <label class="osc2-label">Octave</label>
-                <div class="knob knob2" id="osc2-octave"></div>
-                <span class="label label2">Octave</span>
-            </div>
-        
-            <div class="osc2-control">
-                <label class="osc2-label">FM Depth</label>
-                <div class="knob knob3" id="osc2-fm"></div>
-                <span class="label label3">FM Depth</span>
-            </div>
-        
-            <div class="osc2-control">
-                <label class="osc2-label">PWM Depth</label>
-                <div class="knob knob4" id="osc2-pwm"></div>
-                <span class="label label4">PWM Depth</span>
-            </div>
-        
-            <div class="osc2-control">
-                <label class="osc2-label">Stereo Spread</label>
-                <div class="knob knob5" id="osc2-stereo"></div>
-                <span class="label label5">Stereo Spread</span>
-            </div>
-        
-            <!-- Power Switch -->
-            <div class="power-switch"></div>
         </div>
         
         
