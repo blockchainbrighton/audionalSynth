@@ -1,12 +1,8 @@
 <!-- MidiController.svelte -->
 
-
 <script>
     import { onMount } from 'svelte';
-    import { midiMessage, pianoKeys } from './pianoStore.js'; // Ensure pianoKeys is imported if needed
-
-    export let audioContext;
-    export let gainNode;
+    import { midiData } from './midiStore.js'; // Import the midiData store
 
     let midiAccess;
     let midiInputs = [];
@@ -21,21 +17,12 @@
         }
     });
 
-    // Define or import lightUpKey and lightOffKey functions if they are used here
-    // function lightUpKey(keyIndex) { ... }
-    // function lightOffKey(keyIndex) { ... }
-
     function handleMIDIMessage(message) {
         const [command, note, velocity] = message.data;
         const type = command & 0xf0;
+        const midiMessage = { command, note, velocity, type };
 
-        // Log the received MIDI message
-        console.log("Received MIDI message:", { command, note, velocity, type });
-
-        if (type === 0x90 && velocity > 0) { // Note on
-            midiMessage.set({ type: 'noteOn', note });
-        } else if (type === 0x80 || (type === 0x90 && velocity === 0)) { // Note off
-            midiMessage.set({ type: 'noteOff', note });
-        }
+        // Update the midiData store with the received MIDI message
+        midiData.set(midiMessage);
     }
 </script>

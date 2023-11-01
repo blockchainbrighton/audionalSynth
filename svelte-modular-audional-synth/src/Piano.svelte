@@ -2,36 +2,27 @@
 
 <script>
     import { pianoKeys, midiMessage } from './pianoStore.js';
-    import { midiNoteOn, midiNoteOff } from './midiHelpers.js'; // Import only midiNoteOn and midiNoteOff
-
-    export let audioContext;
-    export let gainNode;
+    import { midiNoteOn, midiNoteOff } from './midiHelpers.js';
 
     let keyNumber = 1;
 
     function createKeys() {
-    let keys = [];
-    for (let i = 0; i < 52; i++) {
-        // Adjust the offset to correctly map MIDI note numbers
-        // Middle C (C4) should correspond to MIDI note 60
-        // Subtracting 8 from the previous adjustment to align C4 with MIDI note 60
-        let midiNote = keyNumber + 23;
+        let keys = [];
+        for (let i = 0; i < 52; i++) {
+            let midiNote = keyNumber + 23;
+            keys.push({ type: 'white', number: keyNumber, midiNote: midiNote, left: i * 23, lit: false });
 
-        keys.push({ type: 'white', number: keyNumber, midiNote: midiNote, left: i * 23, lit: false });
-
-        if (i % 7 !== 2 && i % 7 !== 6) {
-            keys.push({ type: 'black', number: keyNumber + 1, midiNote: midiNote + 1, left: 15 + i * 23, lit: false });
-            keyNumber += 2;
-        } else {
-            keyNumber += 1;
+            if (i % 7 !== 2 && i % 7 !== 6) {
+                keys.push({ type: 'black', number: keyNumber + 1, midiNote: midiNote + 1, left: 15 + i * 23, lit: false });
+                keyNumber += 2;
+            } else {
+                keyNumber += 1;
+            }
         }
-    }
-    return keys;
-};
+        return keys;
+    };
 
-pianoKeys.set(createKeys());
-
-
+    pianoKeys.set(createKeys());
 
     function lightUpKey(keyIndex) {
         pianoKeys.update(keys => keys.map((key, index) => 
@@ -55,7 +46,6 @@ pianoKeys.set(createKeys());
         }
     }
 </script>
-
 
 
 <style>

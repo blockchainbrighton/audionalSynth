@@ -1,6 +1,9 @@
 // midiHelpers.js
 
 import { pianoKeys } from './pianoStore.js';
+import { writable } from 'svelte/store';
+
+export const midiData = writable(null);
 
 function getKeys() {
     let keys;
@@ -10,7 +13,7 @@ function getKeys() {
     return keys;
 }
 
-export function midiNoteOn(midiNote, lightUpKey) {
+export function midiNoteOn(midiNote, velocity, lightUpKey) {
     const keys = getKeys();
     let keyIndex;
     keys.forEach((key, index) => {
@@ -18,7 +21,7 @@ export function midiNoteOn(midiNote, lightUpKey) {
             keyIndex = index;
         }
     });
-    if (keyIndex !== undefined) lightUpKey(keyIndex);
+    if (keyIndex !== undefined) lightUpKey(keyIndex, velocity);
 }
 
 export function midiNoteOff(midiNote, lightOffKey) {
@@ -31,3 +34,12 @@ export function midiNoteOff(midiNote, lightOffKey) {
     });
     if (keyIndex !== undefined) lightOffKey(keyIndex);
 }
+
+// Additional function to handle MIDI control change messages
+export function midiControlChange(controlNumber, value) {
+    // Handle MIDI control change messages here
+    // For example, you can adjust volume, modulation, or other parameters based on controlNumber and value
+    console.log(`Control Change: Control Number = ${controlNumber}, Value = ${value}`);
+}
+
+

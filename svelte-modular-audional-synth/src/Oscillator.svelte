@@ -1,11 +1,12 @@
 <!-- Oscillator.svelte -->
 
-
 <script>
     import { createOscillator } from './oscillatorFunctions.js';
+    import { midiNoteToFrequency } from './utils.js'; // Import the conversion function
 
     export let audioContext;
     export let gainNode;
+    export let midiData;
 
     let waveform = 'sine';
     let attack = 0.1;
@@ -14,9 +15,19 @@
     let release = 0.5;
     let oscillatorInstance;
 
-    export function handlePlayNote(note, velocity, audioContext, gainNode, midiNoteToFrequency) {
+    // Here, we are using the midiData to trigger the oscillator
+    $: if (midiData) {
+        if (midiData.type === 'noteOn') {
+            handlePlayNote(midiData.note, midiData.velocity);
+        } else if (midiData.type === 'noteOff') {
+            handleStopNote(midiData.note);
+        }
+    }
+
+    export function handlePlayNote(note, velocity) {
+        const frequency = midiNoteToFrequency(note); // Convert MIDI note to frequency
         oscillatorInstance = createOscillator(audioContext, gainNode, { waveform, attack, decay, sustain, release });
-        oscillatorInstance.play(note, velocity, midiNoteToFrequency);
+        oscillatorInstance.play(frequency, velocity); // Use frequency instead of MIDI note
     }
 
     export function handleStopNote(note) {
