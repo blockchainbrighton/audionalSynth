@@ -1,7 +1,11 @@
 <script>
-    import { pianoKeys, midiMessage, noteAction, createAudioContext } from './pianoStore.js';
+    import { pianoKeys, midiMessage } from './pianoStore.js';
+    import { get } from 'svelte/store';
+    import { playNote, stopNote } from './Oscillator.svelte';
 
-    let audioContext; // Define the audioContext variable
+    export let audioContext;
+    export let gainNode;
+    export let midiNoteToFrequency;
 
     let keyNumber = 1;
     
@@ -22,30 +26,18 @@
 
     pianoKeys.set(createKeys());
     
-    async function openAudioContext() {
-        if (!audioContext) {
-            audioContext = createAudioContext();
-        }
-        if (audioContext.state === 'suspended') {
-            await audioContext.resume();
-        }
-    }
-
     function lightUpKey(keyIndex) {
-        openAudioContext(); // Open audio context on key click
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: true} : key
         ));
-        // Trigger note on action
-        noteAction.set({ action: 'play', note: $pianoKeys[keyIndex].midiNote });
+        playNote(get(pianoKeys)[keyIndex].midiNote, 100, audioContext, gainNode, midiNoteToFrequency);
     }
 
     function lightOffKey(keyIndex) {
         pianoKeys.update(keys => keys.map((key, index) => 
             index === keyIndex ? {...key, lit: false} : key
         ));
-        // Trigger note off action
-        noteAction.set({ action: 'stop', note: $pianoKeys[keyIndex].midiNote });
+        stopNote(get(pianoKeys)[keyIndex].midiNote, audioContext, gainNode);
     }
 
     $: {

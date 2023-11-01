@@ -1,7 +1,7 @@
 <script>
     export let audioContext;
     export let gainNode;
-    export let midiNoteToFrequency; // Export the midiNoteToFrequency prop
+    export let midiNoteToFrequency;
 
     let oscillator;
     let waveform = 'sine';
@@ -10,7 +10,7 @@
     let sustain = 0.7;
     let release = 0.5;
 
-    export function playNote(note, velocity) {
+    export function playNote(note, velocity, audioContext, gainNode, midiNoteToFrequency) {
         if (!audioContext) return;
 
         oscillator = audioContext.createOscillator();
@@ -23,7 +23,7 @@
         oscillator.start();
     }
 
-    export function stopNote(note) {
+    export function stopNote(note, audioContext, gainNode) {
         if (oscillator) {
             gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + release);
             oscillator.stop(audioContext.currentTime + release);
