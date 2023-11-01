@@ -24,5 +24,8 @@
 
         // Update the midiData store with the received MIDI message
         midiData.set(midiMessage);
+
+        // After setting the midiData store
+        console.log('MidiController: midiData store set to', $midiData);
     }
 </script>

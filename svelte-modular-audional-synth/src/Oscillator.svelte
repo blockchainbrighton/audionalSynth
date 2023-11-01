@@ -17,6 +17,7 @@
 
     // Here, we are using the midiData to trigger the oscillator
     $: if (midiData) {
+        console.log('Oscillator: midiData is truthy, handling MIDI data...');
         if (midiData.type === 'noteOn') {
             handlePlayNote(midiData.note, midiData.velocity);
         } else if (midiData.type === 'noteOff') {

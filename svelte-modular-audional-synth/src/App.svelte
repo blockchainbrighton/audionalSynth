@@ -19,8 +19,10 @@
     let midiMessage;
     midiData.subscribe(value => {
         midiMessage = value;
+        console.log('App: midiData subscription callback, received value:', value);
     });
 </script>
+
 
 <main>
     <h1>Audional Synth - Basic 88 note Keyboard</h1>
