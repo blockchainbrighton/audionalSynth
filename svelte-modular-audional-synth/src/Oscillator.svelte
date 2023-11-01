@@ -1,34 +1,29 @@
+<!-- Oscillator.svelte -->
+
+
 <script>
+    import { createOscillator } from './oscillatorFunctions.js';
 
+    export let audioContext;
+    export let gainNode;
 
-    let oscillator;
     let waveform = 'sine';
     let attack = 0.1;
     let decay = 0.1;
     let sustain = 0.7;
     let release = 0.5;
+    let oscillatorInstance;
 
-    export function playNote(note, velocity, audioContext, gainNode, midiNoteToFrequency) {
-        if (!audioContext) return;
-
-        oscillator = audioContext.createOscillator();
-        oscillator.type = waveform;
-        oscillator.frequency.value = midiNoteToFrequency(note);
-        oscillator.connect(gainNode);
-        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-        gainNode.gain.linearRampToValueAtTime(velocity / 127, audioContext.currentTime + attack);
-        gainNode.gain.linearRampToValueAtTime(sustain, audioContext.currentTime + attack + decay);
-        oscillator.start();
+    export function handlePlayNote(note, velocity, audioContext, gainNode, midiNoteToFrequency) {
+        oscillatorInstance = createOscillator(audioContext, gainNode, { waveform, attack, decay, sustain, release });
+        oscillatorInstance.play(note, velocity, midiNoteToFrequency);
     }
 
-    export function stopNote(note, audioContext, gainNode) {
-        if (oscillator) {
-            gainNode.gain.linearRampToValueAtTime(0, audioContext.currentTime + release);
-            oscillator.stop(audioContext.currentTime + release);
-            oscillator.disconnect();
+    export function handleStopNote(note) {
+        if (oscillatorInstance) {
+            oscillatorInstance.stop();
         }
     }
-
 </script>
 
 <div class="oscillator-controls">

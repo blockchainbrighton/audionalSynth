@@ -4,6 +4,9 @@
     import { pianoKeys, midiMessage } from './pianoStore.js';
     import { midiNoteOn, midiNoteOff } from './midiHelpers.js'; // Import only midiNoteOn and midiNoteOff
 
+    export let audioContext;
+    export let gainNode;
+
     let keyNumber = 1;
 
     function createKeys() {

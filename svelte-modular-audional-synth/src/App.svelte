@@ -1,9 +1,11 @@
+<!-- App.svelte -->
+
+
 <script>
     import Piano from './Piano.svelte';
     import MidiController from './MidiController.svelte';
     import { midiNoteToFrequency } from './utils.js';
     import Oscillator from './Oscillator.svelte';
-
 
     let audioContext = null;
     let gainNode = null;
@@ -18,10 +20,10 @@
     <h1>Audional Synth - Basic 88 note Keyboard</h1>
     <button on:click={initAudio}>Initialize Audio</button>
     {#if audioContext && gainNode}
-        <Piano audioContext={audioContext} gainNode={gainNode} midiNoteToFrequency={midiNoteToFrequency} />
-        <MidiController />
-        <Oscillator audioContext={audioContext} gainNode={gainNode} midiNoteToFrequency={midiNoteToFrequency} />
-    {/if}
+        <Piano audioContext={audioContext} gainNode={gainNode} />
+        <MidiController audioContext={audioContext} gainNode={gainNode} />
+        <Oscillator audioContext={audioContext} gainNode={gainNode} />
+        {/if}
 </main>
 
 
