@@ -6,6 +6,7 @@
     import { midiData } from './midiStore.js';
     import Oscillator from './Oscillator.svelte';
     import { runMidiTest } from './midiTest.js';
+    import Knob from './Knob.svelte'; // Import the Knob component
 
     let audioContext = null;
     let gainNode = null;
@@ -32,6 +33,9 @@
         midiMessage = value;
         console.log('App: midiData subscription callback, received value:', value);
     });
+
+    // Example state for the Knob component
+    let volume = 50;
 </script>
 
 <main>
@@ -42,6 +46,7 @@
         <Piano />
         <MidiController />
         <Oscillator audioContext={audioContext} gainNode={gainNode} midiData={midiMessage} />
+        <Knob value={volume} max={100} min={0} /> <!-- Use the Knob component -->
     {/if}
 </main>
 

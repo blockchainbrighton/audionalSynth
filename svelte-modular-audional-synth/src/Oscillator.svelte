@@ -3,7 +3,7 @@
 <script>
     import { midiData } from './midiStore.js';
     import { handlePlayNote, handleStopNote } from './oscillatorFunctions.js';
-    import { midiNoteToFrequency } from './midiHelpers.js';
+    import { midiNoteToFrequency } from './midiNotesToFrequencies.js';
 
     export let audioContext;
     export let gainNode;
